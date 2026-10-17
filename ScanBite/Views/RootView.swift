@@ -103,18 +103,8 @@ struct OnboardingView: View {
                         action: lanjut
                     )
                     if pilihan.isEmpty {
-                        Button {
-                            lanjut()
-                        } label: {
-                            Text("Scan tanpa pantangan")
-                                .font(.pantangBody.weight(.medium))
-                                .foregroundStyle(Color.pantangInk)
-                                .frame(maxWidth: .infinity)
-                                .frame(height: 50)
-                                .overlay { RoundedRectangle(cornerRadius: 14).stroke(Color.pantangChipLine, lineWidth: 1) }
-                        }
-                        .buttonStyle(.plain)
-                        .accessibilityHint("Menampilkan alergen umum yang ada di komposisi")
+                        PrimaryButton(title: "Scan tanpa pantangan", outline: true, action: lanjut)
+                            .accessibilityHint("Menampilkan alergen umum yang ada di komposisi")
                     }
                     Text("Dari komposisi, bukan diagnosis.")
                         .font(.pantangCaption)
@@ -484,34 +474,40 @@ private struct PantangChip: View {
     }
 }
 
+/// Semua tombol penuh-lebar memakai bentuk yang sama: tinggi 52, sudut 14, teks dan ikon di tengah.
 private struct PrimaryButton: View {
     let title: String
     var systemImage: String?
     var imageOnTrailing = true
-    var centeredIcon = false
+    var centeredIcon = true
     var enabled = true
+    /// Garis tepi tanpa isi, untuk pilihan kedua.
+    var outline = false
     var action: () -> Void
 
     var body: some View {
         Button(action: action) {
-            HStack(spacing: centeredIcon ? 8 : 0) {
-                if let systemImage, !imageOnTrailing || centeredIcon {
+            HStack(spacing: 8) {
+                if let systemImage, !imageOnTrailing {
                     Image(systemName: systemImage)
                 }
                 Text(title)
-                    .frame(maxWidth: centeredIcon ? nil : .infinity, alignment: imageOnTrailing ? .leading : .trailing)
-                if let systemImage, imageOnTrailing, !centeredIcon {
+                if let systemImage, imageOnTrailing {
                     Image(systemName: systemImage)
                 }
             }
-            .frame(maxWidth: .infinity, alignment: centeredIcon ? .center : .leading)
             .font(.system(size: 15, weight: .semibold))
-            .foregroundStyle(Color.white)
-            .padding(.horizontal, 16)
+            .foregroundStyle(outline ? Color.pantangInk : Color.white)
             .frame(maxWidth: .infinity)
             .frame(height: 52)
-            .background(enabled ? Color.pantangInk : Color.pantangButtonOff)
+            .background(outline ? Color.clear : (enabled ? Color.pantangInk : Color.pantangButtonOff))
+            .overlay {
+                if outline {
+                    RoundedRectangle(cornerRadius: 14).stroke(Color.pantangChipLine, lineWidth: 1)
+                }
+            }
             .clipShape(RoundedRectangle(cornerRadius: 14))
+            .contentShape(RoundedRectangle(cornerRadius: 14))
         }
         .buttonStyle(.plain)
         .disabled(!enabled)
