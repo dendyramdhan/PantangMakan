@@ -126,7 +126,8 @@ enum ScanService {
             reply = try await session.respond(to: "Fakta:\n" + fakta.joined(separator: "\n")).content
         } catch {
             print("PANTANG FM error: \(error)")
-            return (nil, "Foundation Models gagal: \(error.localizedDescription)")
+            let bahasa = Locale.preferredLanguages.prefix(2).joined(separator: ", ")
+            return (nil, "Foundation Models gagal: \(error.localizedDescription) [locale \(Locale.current.identifier), bahasa \(bahasa)]")
         }
         guard let teks = diterima(reply, boleh: Set(hits + mungkin), maksKalimat: min(3, jumlahKata)) else {
             print("PANTANG FM ditolak: \(reply)")
