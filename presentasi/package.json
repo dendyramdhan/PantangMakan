@@ -1,0 +1,5 @@
+{
+  "private": true,
+  "scripts": { "build": "node buat-slide.js" },
+  "dependencies": { "pptxgenjs": "4.0.1" }
+}

@@ -1,0 +1,378 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		04662F7511D44C4A359D79C3 /* ContohSusu.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B5CA91C5079F453FFE0A1672 /* ContohSusu.jpg */; };
+		4ED0AC0A78D408EA08A75713 /* Pantangan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160C288BE3BBB7503D849281 /* Pantangan.swift */; };
+		77189FC9DC0C2A7775E04743 /* CameraPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = E70D8AB5A20956C2C6BC8D24 /* CameraPicker.swift */; };
+		A41D7B8441E0E47E51AE3A7D /* PantangMakanApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C784D315E0115A7ED47A2F25 /* PantangMakanApp.swift */; };
+		B525EE71F7F4334B3E0EEAD2 /* ContohTeh.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 88AB2A195F860718BD385252 /* ContohTeh.jpg */; };
+		CD5DFF75CCB478327920E009 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7455224D3C8442EBB1E767B /* RootView.swift */; };
+		EFBF13C4F936FE5FABF6D570 /* ScanService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B72B69EC9157C8E5911987 /* ScanService.swift */; };
+		FB459EF0D44246A69EBF8229 /* PantanganText.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 0618C1351E0EA5C5EA7E5C02 /* PantanganText.mlmodel */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		0618C1351E0EA5C5EA7E5C02 /* PantanganText.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = PantanganText.mlmodel; sourceTree = "<group>"; };
+		160C288BE3BBB7503D849281 /* Pantangan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pantangan.swift; sourceTree = "<group>"; };
+		48B72B69EC9157C8E5911987 /* ScanService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanService.swift; sourceTree = "<group>"; };
+		5186F8CCF480887450FA74AA /* PantangMakan.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PantangMakan.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		88AB2A195F860718BD385252 /* ContohTeh.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = ContohTeh.jpg; sourceTree = "<group>"; };
+		B5CA91C5079F453FFE0A1672 /* ContohSusu.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = ContohSusu.jpg; sourceTree = "<group>"; };
+		C7455224D3C8442EBB1E767B /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
+		C784D315E0115A7ED47A2F25 /* PantangMakanApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PantangMakanApp.swift; sourceTree = "<group>"; };
+		E70D8AB5A20956C2C6BC8D24 /* CameraPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPicker.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		0C631575AC4A7B9071F6E09B /* PantangMakan */ = {
+			isa = PBXGroup;
+			children = (
+				C784D315E0115A7ED47A2F25 /* PantangMakanApp.swift */,
+				811475A8E504986F9559875A /* Models */,
+				8637E768BE0F535CF8CD4FE1 /* Samples */,
+				B6B1E070887850B55914CBB2 /* Services */,
+				5023EFF9327142ACF31AA60E /* Views */,
+			);
+			path = PantangMakan;
+			sourceTree = "<group>";
+		};
+		3DF59869A5996277F9974848 = {
+			isa = PBXGroup;
+			children = (
+				0C631575AC4A7B9071F6E09B /* PantangMakan */,
+				819DC4FEC24A93E942DC6F5E /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		5023EFF9327142ACF31AA60E /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				E70D8AB5A20956C2C6BC8D24 /* CameraPicker.swift */,
+				C7455224D3C8442EBB1E767B /* RootView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		811475A8E504986F9559875A /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				160C288BE3BBB7503D849281 /* Pantangan.swift */,
+				0618C1351E0EA5C5EA7E5C02 /* PantanganText.mlmodel */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		819DC4FEC24A93E942DC6F5E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				5186F8CCF480887450FA74AA /* PantangMakan.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		8637E768BE0F535CF8CD4FE1 /* Samples */ = {
+			isa = PBXGroup;
+			children = (
+				B5CA91C5079F453FFE0A1672 /* ContohSusu.jpg */,
+				88AB2A195F860718BD385252 /* ContohTeh.jpg */,
+			);
+			path = Samples;
+			sourceTree = "<group>";
+		};
+		B6B1E070887850B55914CBB2 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				48B72B69EC9157C8E5911987 /* ScanService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		DA8CED517DE3B3925BDA499E /* PantangMakan */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 131F5D3AD20B7B008CDCC548 /* Build configuration list for PBXNativeTarget "PantangMakan" */;
+			buildPhases = (
+				16AE30E9DCE75F6FE384D7C5 /* Sources */,
+				A3B0E0AC204C9B93B7391DEC /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = PantangMakan;
+			packageProductDependencies = (
+			);
+			productName = PantangMakan;
+			productReference = 5186F8CCF480887450FA74AA /* PantangMakan.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		9271D198A69E26113EC2E947 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					DA8CED517DE3B3925BDA499E = {
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 2E4ED431BDECBBD49457A238 /* Build configuration list for PBXProject "PantangMakan" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 3DF59869A5996277F9974848;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 819DC4FEC24A93E942DC6F5E /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				DA8CED517DE3B3925BDA499E /* PantangMakan */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A3B0E0AC204C9B93B7391DEC /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				04662F7511D44C4A359D79C3 /* ContohSusu.jpg in Resources */,
+				B525EE71F7F4334B3E0EEAD2 /* ContohTeh.jpg in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		16AE30E9DCE75F6FE384D7C5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				77189FC9DC0C2A7775E04743 /* CameraPicker.swift in Sources */,
+				A41D7B8441E0E47E51AE3A7D /* PantangMakanApp.swift in Sources */,
+				4ED0AC0A78D408EA08A75713 /* Pantangan.swift in Sources */,
+				FB459EF0D44246A69EBF8229 /* PantanganText.mlmodel in Sources */,
+				CD5DFF75CCB478327920E009 /* RootView.swift in Sources */,
+				EFBF13C4F936FE5FABF6D570 /* ScanService.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		12678D75D21FED214F0DD5B2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		181D5B38BA18DE47E2767DED /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		4240E56234C7D0434E5B2F80 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGNING_ALLOWED = YES;
+				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = MD9FTFBKQK;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = PantangMakan;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Kamera dipakai untuk memfoto daftar komposisi pada kemasan.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Galeri dipakai untuk memilih foto daftar komposisi.";
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.dendy.PantangMakan;
+				PRODUCT_NAME = PantangMakan;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		4467BA0E593FF3E19485F579 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGNING_ALLOWED = YES;
+				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = MD9FTFBKQK;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = PantangMakan;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Kamera dipakai untuk memfoto daftar komposisi pada kemasan.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Galeri dipakai untuk memilih foto daftar komposisi.";
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.dendy.PantangMakan;
+				PRODUCT_NAME = PantangMakan;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		131F5D3AD20B7B008CDCC548 /* Build configuration list for PBXNativeTarget "PantangMakan" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4240E56234C7D0434E5B2F80 /* Debug */,
+				4467BA0E593FF3E19485F579 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		2E4ED431BDECBBD49457A238 /* Build configuration list for PBXProject "PantangMakan" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				12678D75D21FED214F0DD5B2 /* Debug */,
+				181D5B38BA18DE47E2767DED /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 9271D198A69E26113EC2E947 /* Project object */;
+}

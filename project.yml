@@ -1,0 +1,28 @@
+name: PantangMakan
+options:
+  bundleIdPrefix: com.dendy
+  deploymentTarget:
+    iOS: "26.0"
+targets:
+  PantangMakan:
+    type: application
+    platform: iOS
+    deploymentTarget: "26.0"
+    sources:
+      - path: PantangMakan
+    settings:
+      base:
+        PRODUCT_NAME: PantangMakan
+        PRODUCT_BUNDLE_IDENTIFIER: com.dendy.PantangMakan
+        INFOPLIST_KEY_CFBundleDisplayName: PantangMakan
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        INFOPLIST_KEY_UISupportedInterfaceOrientations: UIInterfaceOrientationPortrait
+        INFOPLIST_KEY_NSCameraUsageDescription: Kamera dipakai untuk memfoto daftar komposisi pada kemasan.
+        INFOPLIST_KEY_NSPhotoLibraryUsageDescription: Galeri dipakai untuk memilih foto daftar komposisi.
+        SWIFT_VERSION: "5.0"
+        GENERATE_INFOPLIST_FILE: YES
+        TARGETED_DEVICE_FAMILY: "1"
+        CODE_SIGN_STYLE: Automatic
+        CODE_SIGNING_ALLOWED: YES
+        CODE_SIGNING_REQUIRED: NO
+        DEVELOPMENT_TEAM: R543KMB693
