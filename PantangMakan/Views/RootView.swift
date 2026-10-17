@@ -262,7 +262,7 @@ struct ScanView: View {
             // Hasil tiap fitur AI ditampilkan supaya terlihat perannya di satu layar.
             VStack(alignment: .leading, spacing: 6) {
                 Text("HASIL AI")
-                    .font(.pantangEyebrow)
+                    .font(.pantangHasilJudul)
                     .foregroundStyle(Color.pantangMuted)
                 RincianPemilah(kalimat: hasil.kalimatDipilah)
                 BarisAI(nama: "Apple Foundation Models · Penjelasan", hasil: hasil.statusModel)
@@ -273,10 +273,10 @@ struct ScanView: View {
             if let penjelasan = hasil.penjelasan {
                 VStack(alignment: .leading, spacing: 6) {
                     Text("KENAPA")
-                        .font(.pantangEyebrow)
+                        .font(.pantangHasilJudul)
                         .foregroundStyle(Color.pantangMuted)
                     Text(penjelasan)
-                        .font(.pantangBody)
+                        .font(.pantangHasilIsi)
                         .foregroundStyle(Color.pantangInk)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -284,18 +284,18 @@ struct ScanView: View {
 
             VStack(alignment: .leading, spacing: 10) {
                 Text("BAHAN TERBACA")
-                    .font(.pantangEyebrow)
+                    .font(.pantangHasilJudul)
                     .foregroundStyle(Color.pantangMuted)
                 if hasil.teks.isEmpty {
                     Text("Tidak ada kalimat bahan yang terbaca.")
-                        .font(.system(size: 13, design: .monospaced))
+                        .font(.system(size: 16, design: .monospaced))
                         .foregroundStyle(Color.pantangInk)
                 } else {
                     MarkedComposition(teks: hasil.teks, pilihan: pilihan)
                 }
                 if !hasil.teksPeringatan.isEmpty {
                     Text("PERINGATAN DI LABEL")
-                        .font(.pantangEyebrow)
+                        .font(.pantangHasilJudul)
                         .foregroundStyle(Color.pantangMuted)
                         .padding(.top, 6)
                     MarkedComposition(teks: hasil.teksPeringatan, pilihan: pilihan)
@@ -616,19 +616,19 @@ private struct RincianPemilah: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text("Model Kustom · Pemilah Kalimat")
-                .font(.system(size: 14, weight: .semibold))
+                .font(.system(size: 17, weight: .semibold))
                 .foregroundStyle(Color.pantangInk)
             ForEach(jenis, id: \.0) { item in
                 let isi = kalimat.filter { $0.jenis == item.0 }
                 VStack(alignment: .leading, spacing: 3) {
                     Text("\(item.1): \(isi.count) kalimat, \(item.2)")
-                        .font(.pantangMeta)
+                        .font(.system(size: 16, weight: .medium))
                         .foregroundStyle(Color.pantangInk)
                     ForEach(Array(isi.enumerated()), id: \.offset) { _, k in
                         Text("• \(k.teks)")
-                            .font(.system(size: 12, design: .monospaced))
+                            .font(.system(size: 14, design: .monospaced))
                             .foregroundStyle(Color.pantangMuted)
-                            .lineLimit(2)
+                            .lineLimit(3)
                     }
                 }
                 .padding(.leading, 10)
@@ -646,10 +646,10 @@ private struct BarisAI: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 2) {
             Text(nama)
-                .font(.system(size: 14, weight: .semibold))
+                .font(.system(size: 17, weight: .semibold))
                 .foregroundStyle(Color.pantangInk)
             Text(hasil)
-                .font(.pantangMeta)
+                .font(.system(size: 16, weight: .medium))
                 .foregroundStyle(Color.pantangMuted)
         }
         .padding(.top, 2)
@@ -682,7 +682,7 @@ private struct MarkedLine: View {
             ForEach(potongan) { piece in
                 if piece.highlight {
                     Text(piece.text)
-                        .font(.system(size: 13, weight: .semibold, design: .monospaced))
+                        .font(.system(size: 16, weight: .semibold, design: .monospaced))
                         .foregroundStyle(Color.pantangBahaya)
                         .padding(.horizontal, 6)
                         .padding(.vertical, 2)
@@ -690,7 +690,7 @@ private struct MarkedLine: View {
                         .clipShape(Capsule())
                 } else {
                     Text(piece.text)
-                        .font(.system(size: 13, weight: .regular, design: .monospaced))
+                        .font(.system(size: 16, weight: .regular, design: .monospaced))
                         .foregroundStyle(Color.pantangInk)
                 }
             }
@@ -861,4 +861,6 @@ private extension Font {
     static let pantangMeta = Font.system(size: 14, weight: .medium)
     static let pantangCaption = Font.system(size: 13, weight: .regular)
     static let pantangEyebrow = Font.system(size: 11, weight: .medium)
+    static let pantangHasilJudul = Font.system(size: 13, weight: .semibold)
+    static let pantangHasilIsi = Font.system(size: 18, weight: .regular)
 }
