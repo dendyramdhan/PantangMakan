@@ -264,7 +264,9 @@ struct ScanView: View {
                 Text("HASIL AI")
                     .font(.pantangHasilJudul)
                     .foregroundStyle(Color.pantangMuted)
-                RincianPemilah(kalimat: hasil.kalimatDipilah)
+                Text("\(hasil.jumlah[.bahan] ?? 0) bahan · \(hasil.jumlah[.peringatan] ?? 0) peringatan · \(hasil.jumlah[.lain] ?? 0) lain")
+                    .font(.system(size: 16, weight: .medium))
+                    .foregroundStyle(Color.pantangInk)
                 BarisAI(nama: "Apple Foundation Models · Penjelasan", hasil: hasil.statusModel)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -600,41 +602,6 @@ private struct DeniedBanner: View {
         .overlay(alignment: .leading) {
             Rectangle().fill(Color.pantangAccent).frame(width: 2)
         }
-    }
-}
-
-/// Hasil Model Kustom dirinci ke bawah: tiap jenis, jumlahnya, lalu kalimatnya.
-private struct RincianPemilah: View {
-    let kalimat: [KalimatLabel]
-
-    private let jenis: [(JenisKalimat, String, String)] = [
-        (.bahan, "Bahan", "dicek dengan pantangan"),
-        (.peringatan, "Peringatan", "jadi kotak kuning"),
-        (.lain, "Lain", "diabaikan"),
-    ]
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text("Model Kustom · Pemilah Kalimat")
-                .font(.system(size: 17, weight: .semibold))
-                .foregroundStyle(Color.pantangInk)
-            ForEach(jenis, id: \.0) { item in
-                let isi = kalimat.filter { $0.jenis == item.0 }
-                VStack(alignment: .leading, spacing: 3) {
-                    Text("\(item.1): \(isi.count) kalimat, \(item.2)")
-                        .font(.system(size: 16, weight: .medium))
-                        .foregroundStyle(Color.pantangInk)
-                    ForEach(Array(isi.enumerated()), id: \.offset) { _, k in
-                        Text("• \(k.teks)")
-                            .font(.system(size: 14, design: .monospaced))
-                            .foregroundStyle(Color.pantangMuted)
-                            .lineLimit(3)
-                    }
-                }
-                .padding(.leading, 10)
-            }
-        }
-        .padding(.top, 2)
     }
 }
 
