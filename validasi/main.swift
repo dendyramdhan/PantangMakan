@@ -22,7 +22,7 @@ func ocr(_ path: String) -> String {
 let pakaiModel = !CommandLine.arguments.contains("--tanpa-model")
 var model: NLModel?
 if pakaiModel {
-    let url = try MLModel.compileModel(at: URL(fileURLWithPath: "PantangMakan/Models/PemilahKalimat.mlmodel"))
+    let url = try MLModel.compileModel(at: URL(fileURLWithPath: "ScanBite/Models/PemilahKalimat.mlmodel"))
     model = try NLModel(contentsOf: url)
 }
 let semua = Set(Pantangan.allCases)

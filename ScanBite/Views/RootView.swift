@@ -308,7 +308,7 @@ struct ScanView: View {
                 VStack(alignment: .leading, spacing: 10) {
                     BarisInfo(
                         label: "Kalimat label",
-                        nilai: "\(hasil.jumlah[.bahan] ?? 0) bahan · \(hasil.jumlah[.peringatan] ?? 0) peringatan · \(hasil.jumlah[.lain] ?? 0) lain"
+                        nilai: "\(hasil.jumlah[.bahan] ?? 0) bahan · \(hasil.jumlah[.peringatan] ?? 0) peringatan"
                     )
                     BarisInfo(label: "Penjelasan", nilai: "Apple Foundation Models", catatan: [status.0, status.1].compactMap { $0 }.joined(separator: ". "))
                 }

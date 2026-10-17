@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Serve the proposal UI and the PantangMakan Notion page it reads."""
+"""Serve the proposal UI and the ScanBite Notion page it reads."""
 
 import json
 import sqlite3
@@ -35,8 +35,8 @@ def read_page():
             (PAGE_ID,),
         ).fetchone()
         if not row or not row[2]:
-            raise RuntimeError("halaman PantangMakan tidak ada di Notion lokal")
-        title = rich_text(row[0]) or "PantangMakan"
+            raise RuntimeError("halaman ScanBite tidak ada di Notion lokal")
+        title = rich_text(row[0]) or "ScanBite"
         content = json.loads(row[1] or "[]")
         blocks = []
         for child_id in content:

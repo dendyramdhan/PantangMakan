@@ -19,13 +19,13 @@ Pengguna memilih pantangan makannya (susu, kacang, telur, gluten, pemanis, garam
 ## Menjalankan
 
 - Xcode 26.6 atau lebih baru, iOS 26.0 ke atas.
-- Buka `PantangMakan.xcodeproj`, pilih personal Team di Signing, lalu ⌘R.
+- Buka `ScanBite.xcodeproj`, pilih personal Team di Signing, lalu ⌘R.
 - Foundation Models butuh iPhone dengan Apple Intelligence menyala, atau Simulator iOS 27.
 - Pratinjau tanpa kamera: jalankan dengan argumen `--pratinjau`, `--aman`, `--peringatan`, atau `--ditolak`.
 
 ## Isi repo
 
-- `PantangMakan/` kode app dan model Create ML.
+- `ScanBite/` kode app dan model Create ML.
 - `dataset/` data latih, script OCR/label, dan `latih.swift`.
 - `validasi/` 10 foto uji, script evaluasi, dan hasilnya.
 - `presentasi/` slide (`ScanBite.pptx`, `ScanBite.pdf`), screenshot demo, dan script pembuat slide.

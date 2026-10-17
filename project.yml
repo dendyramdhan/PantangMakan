@@ -1,19 +1,19 @@
-name: PantangMakan
+name: ScanBite
 options:
   bundleIdPrefix: com.dendy
   deploymentTarget:
     iOS: "26.0"
 targets:
-  PantangMakan:
+  ScanBite:
     type: application
     platform: iOS
     deploymentTarget: "26.0"
     sources:
-      - path: PantangMakan
+      - path: ScanBite
     settings:
       base:
-        PRODUCT_NAME: PantangMakan
-        PRODUCT_BUNDLE_IDENTIFIER: com.dendy.PantangMakan
+        PRODUCT_NAME: ScanBite
+        PRODUCT_BUNDLE_IDENTIFIER: com.dendy.ScanBite
         INFOPLIST_KEY_CFBundleDisplayName: ScanBite
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         INFOPLIST_KEY_UILaunchScreen_Generation: YES

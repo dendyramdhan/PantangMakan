@@ -47,5 +47,5 @@ let meta = MLModelMetadata(
     shortDescription: "Memilah kalimat label kemasan: bahan, peringatan (dapat mengandung), atau lain. Create ML maxEnt, akurasi test \(String(format: "%.1f", uji))%.",
     version: "2"
 )
-try model.write(to: URL(fileURLWithPath: "PantangMakan/Models/PemilahKalimat.mlmodel"), metadata: meta)
-print("disimpan: PantangMakan/Models/PemilahKalimat.mlmodel")
+try model.write(to: URL(fileURLWithPath: "ScanBite/Models/PemilahKalimat.mlmodel"), metadata: meta)
+print("disimpan: ScanBite/Models/PemilahKalimat.mlmodel")

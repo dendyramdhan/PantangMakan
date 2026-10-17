@@ -233,7 +233,7 @@ function isiDariNotion(page) {
     return out;
   };
   document.getElementById("judul").textContent = page.title || "ScanBite";
-  document.getElementById("kicker").textContent = "Dibaca dari Notion · halaman PantangMakan";
+  document.getElementById("kicker").textContent = "Dibaca dari Notion · halaman ScanBite";
   const intro = blocks.find(b => b.type === "text" && b.text.startsWith("Grup 5"));
   const masalah = section("Masalah").find(b => b.type === "text");
   document.getElementById("lead").textContent = [intro && intro.text, masalah && masalah.text].filter(Boolean).join(" ");

@@ -1,6 +1,6 @@
 # Dataset PemilahKalimat (Create ML)
 
-Model `PantangMakan/Models/PemilahKalimat.mlmodel` memberi jenis tiap kalimat di label kemasan:
+Model `ScanBite/Models/PemilahKalimat.mlmodel` memberi jenis tiap kalimat di label kemasan:
 
 - `bahan`: daftar komposisi atau pernyataan "mengandung". Hanya ini yang dicocokkan dengan pantangan.
 - `peringatan`: "dapat mengandung", "diproduksi menggunakan peralatan yang juga memproses …".

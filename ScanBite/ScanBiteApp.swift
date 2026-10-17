@@ -1,7 +1,7 @@
 import SwiftUI
 
 @main
-struct PantangMakanApp: App {
+struct ScanBiteApp: App {
     var body: some Scene {
         WindowGroup {
             RootView()

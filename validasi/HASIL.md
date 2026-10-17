@@ -5,7 +5,7 @@
 Alurnya sama dengan app: Vision membaca teks, gerbang judul Komposisi/Ingredients, Create ML `PemilahKalimat` memilah kalimat, lalu daftar kata mencocokkan pantangan di kalimat bahan. Keenam pantangan dipilih sekaligus. Foundation Models tidak ikut karena hanya menulis penjelasan.
 
 ```
-swiftc -O -o /tmp/pm-eval validasi/main.swift PantangMakan/Models/Pantangan.swift PantangMakan/Services/Pemilah.swift
+swiftc -O -o /tmp/pm-eval validasi/main.swift ScanBite/Models/Pantangan.swift ScanBite/Services/Pemilah.swift
 /tmp/pm-eval validasi/foto/*.jpg               # dengan Create ML
 /tmp/pm-eval validasi/foto/*.jpg --tanpa-model # semua kalimat dianggap bahan (versi lama)
 /tmp/pm-eval validasi/foto/*.jpg --rinci       # tampilkan jenis tiap kalimat
