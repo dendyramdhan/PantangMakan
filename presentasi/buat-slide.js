@@ -75,7 +75,7 @@ function contentTitle(slide, title) {
     x: 0.85, y: 2.15, w: 11, h: 1.05,
     fontFace: SERIF, fontSize: 60, color: C.ink, margin: 0,
   });
-  s.addText("Foto daftar komposisi. Satu kalimat: aman, atau tidak aman.", {
+  s.addText("Foto komposisinya, langsung tahu ada pantanganmu atau tidak.", {
     x: 0.85, y: 3.35, w: 10, h: 0.4,
     fontFace: FONT, fontSize: 18, color: C.muted, margin: 0,
   });
@@ -130,15 +130,11 @@ divider("01", "Tim Kami", "Bagian ini tidak dinilai. Sebut nama saja. Pekerjaan 
     fontFace: FONT,
     valign: "middle",
   });
-  s.addText("Foto tim belum ada. Pekerjaan dan peran diisi setelah disepakati.", {
-    x: 0.55, y: 6.05, w: 12, h: 0.32,
-    fontFace: FONT, fontSize: 14, color: C.muted, margin: 0,
-  });
   footer(s, "Grup 5  ·  PantangMakan  ·  Jalur Tim");
-  s.addNotes("Jangan isi pekerjaan atau peran kalau belum disepakati. Nanny dan sutrisno ada di Grup 6, jangan disebut sebagai anggota.");
+  s.addNotes("Jangan isi pekerjaan atau peran kalau belum disepakati.");
 }
 
-divider("02", "Masalah yang Kami Selesaikan", "User sudah tahu pantangannya. Huruf di kemasan terlalu kecil, jadi bahan yang harus dihindari terlewat. Masalah ini dari user, bukan dari riset yang dikarang.");
+divider("02", "Masalah yang Kami Selesaikan", "Mulai dari cerita satu orang sungguhan sebelum fitur. Sebut nama dan pantangannya, jangan dikarang.");
 
 {
   const s = pres.addSlide();
@@ -146,11 +142,11 @@ divider("02", "Masalah yang Kami Selesaikan", "User sudah tahu pantangannya. Hur
   contentTitle(s, "Masalah yang Kami Selesaikan");
   // Lima isi yang diminta template: pengguna, masalah, asal masalah, cara app menyelesaikan, dampak lain.
   const cards = [
-    { k: "Pengguna", t: "Orang yang sudah tahu pantangan makannya, karena alergi atau sengaja dihindari." },
+    { k: "Pengguna", t: "Orang yang punya pantangan makan, karena alergi atau pilihan sendiri." },
     { k: "Masalah", t: "Huruf daftar komposisi di kemasan terlalu kecil, jadi bahan pantangan terlewat." },
-    { k: "Asal masalah", t: "Dari pengguna nyata yang punya pantangan. Ia harus membalik bungkus dan membaca komposisi satu per satu." },
-    { k: "Cara app menyelesaikannya", t: "Pilih pantangan sekali, foto komposisi, lalu baca satu kalimat: aman atau tidak aman." },
-    { k: "Dampak lain", t: "Nama bahan asing ikut dikenali. Arachis hypogaea terbaca sebagai kacang, jadi user tidak perlu hafal nama Latin atau Inggris.", wide: true },
+    { k: "Asal masalah", t: "Dari pengguna yang punya pantangan: tiap belanja, ia membalik bungkus dan membaca huruf kecil satu per satu." },
+    { k: "Cara app menyelesaikannya", t: "Pilih pantangan sekali, foto komposisinya, lalu baca satu kalimat: ada pantanganmu atau tidak." },
+    { k: "Dampak lain", t: "Nama bahan asing ikut dikenali. Arachis hypogaea terbaca sebagai kacang, jadi pengguna tidak perlu hafal nama Latin atau Inggrisnya.", wide: true },
   ];
   const cardH = 1.62;
   const gapY = 0.2;
@@ -185,9 +181,9 @@ divider("03", "Solusi Berbasis AI", "Sebut kelompoknya: dua diajarkan (Create ML
   contentTitle(s, "Solusi Berbasis AI");
   const steps = [
     { n: "1", grup: "Side-app  ·  baca teks dari foto", judul: "Vision", isi: "Membaca huruf di foto, bahasa Indonesia dan Inggris. Hanya teks di bawah judul Komposisi, Ingredients, atau Daftar bahan." },
-    { n: "2", grup: "Diajarkan  ·  sesi 1.3", judul: "Create ML", isi: "Model PantanganText mengklasifikasi teks komposisi lewat Core ML. Labelnya tampil di layar hasil, misalnya kacang 92%." },
-    { n: "3", grup: "Diajarkan  ·  sesi 2.6", judul: "Foundation Models", isi: "System Language Model bawaan Apple Intelligence menyusun kalimat aman atau tidak aman." },
-    { n: "4", grup: "Side-app  ·  model di server", judul: "API Dicoding", isi: "Kalau model Apple tidak tersedia, gpt-oss-20b menyusun kalimat yang sama. Kalau internet mati, kalimat tetap keluar dan ada tombol Coba lagi." },
+    { n: "2", grup: "Diajarkan  ·  sesi 1.3", judul: "Create ML", isi: "Model buatan kami menebak jenis pantangan dari teks komposisi. Hasilnya tampil di layar, misalnya kacang 92%." },
+    { n: "3", grup: "Diajarkan  ·  sesi 2.6", judul: "Foundation Models", isi: "Model bahasa bawaan Apple Intelligence menyusun kalimat hasilnya, misalnya “Ada kacang di komposisi ini.”" },
+    { n: "4", grup: "Side-app  ·  model di server", judul: "API Dicoding", isi: "Kalau model Apple tidak tersedia, model di server Dicoding yang menyusun kalimatnya. Kalau internet mati, kalimat tetap keluar dan ada tombol Coba lagi." },
   ];
   steps.forEach((step, i) => {
     const x = 0.5 + i * 3.2;
@@ -212,8 +208,8 @@ divider("03", "Solusi Berbasis AI", "Sebut kelompoknya: dua diajarkan (Create ML
       fontFace: FONT, fontSize: 14, color: C.ink, margin: 0,
     });
   });
-  footer(s, "Keputusan kartu: daftar kata, sesuai pantangan yang user pilih.");
-  s.addNotes("Urutan di app: foto, Vision membaca teks, Create ML memberi label (tampil di HASIL AI), Foundation Models menyusun kalimat; API Dicoding hanya kalau model Apple tidak ada. Warna kartu tetap dari daftar kata sesuai pantangan user. User pilih garam, kemasan tidak memuat garam: Aman, bisa kamu makan, tidak mengandung garam. Ada arachis dan user pilih kacang: Tidak aman, mengandung kacang. System Language Model hanya menyusun kalimat itu.");
+  footer(s, "Grup 5  ·  PantangMakan  ·  Jalur Tim");
+  s.addNotes("Urutan di app: foto, Vision membaca teks, Create ML memberi label yang tampil di HASIL AI, lalu Foundation Models menyusun kalimat. API Dicoding dipakai kalau model Apple tidak ada. Kalimat dari model dicek dulu; kalau tidak lolos, app memakai kalimat dari daftar kata. Contoh: pilih kacang, ada arachis di komposisi: Ada kacang di komposisi ini.");
 }
 
 divider("04", "Demo Produk", "Saat bagian ini, pindah ke iPhone. Urutan: happy path merah, foto ulang jadi hijau, lalu foto yang bukan komposisi ditolak. Jangan tutup app di antara foto pertama dan kedua.");
@@ -223,9 +219,9 @@ divider("04", "Demo Produk", "Saat bagian ini, pindah ke iPhone. Urutan: happy p
   bg(s);
   contentTitle(s, "Demo Produk");
   const phones = [
-    { file: __dirname + "/demo/pantang-bahaya.png", cap: "Happy path", sub: "Tidak aman, mengandung kacang dan pemanis." },
-    { file: __dirname + "/demo/pantang-aman.png", cap: "Foto kedua, app tetap terbuka", sub: "Aman, bisa kamu makan, tidak mengandung garam." },
-    { file: __dirname + "/demo/pantang-ditolak.png", cap: "Unhappy path", sub: "Ditolak. Gambar ini bukan daftar komposisi." },
+    { file: __dirname + "/demo/pantang-bahaya.png", cap: "Happy path", sub: "Ada kacang dan pemanis." },
+    { file: __dirname + "/demo/pantang-aman.png", cap: "Foto lagi tanpa menutup app", sub: "Tidak ditemukan garam." },
+    { file: __dirname + "/demo/pantang-ditolak.png", cap: "Unhappy path", sub: "Ditolak, bukan daftar komposisi." },
   ];
   const h = 4.85;
   const w = h * (1260 / 2736);
@@ -252,16 +248,16 @@ divider("04", "Demo Produk", "Saat bagian ini, pindah ke iPhone. Urutan: happy p
   s.addNotes("Di iPhone: pilih kacang dan pemanis, foto komposisi yang memuat kacang dan gula. Lalu Foto ulang pada teh, pantangan garam: kartu hijau. Terakhir foto depan kemasan: Ditolak. Izin kamera ditolak juga bisa ditunjukkan: pita kiri dan Buka Pengaturan.");
 }
 
-divider("05", "Validasi Produk", "Jangan mengarang angka. Evaluasi 10 foto belum dijalankan. Lesson learned yang boleh disebut: Foundation Models gagal di Simulator iOS 26, jalan di Simulator iOS 27.");
+divider("05", "Validasi Produk", "Jangan mengarang angka. Evaluasi 10 foto belum dijalankan. Lesson learned: model bahasa kadang menambah kata sendiri, jadi kalimatnya dicek dulu.");
 
 {
   const s = pres.addSlide();
   bg(s);
   contentTitle(s, "Validasi Produk");
   const stats = [
-    { k: "Input yang dicoba", v: "—", d: "Isi: jumlah foto kemasan sungguhan" },
-    { k: "Berhasil", v: "—", d: "Isi: berapa yang kalimatnya benar" },
-    { k: "Contoh yang gagal", v: "—", d: "Isi: satu kemasan yang salah dan sebabnya" },
+    { k: "Input yang dicoba", v: "—", d: "" },
+    { k: "Berhasil", v: "—", d: "" },
+    { k: "Contoh yang gagal", v: "—", d: "" },
   ];
   stats.forEach((item, i) => {
     const x = 0.55 + i * 4.2;
@@ -290,9 +286,9 @@ divider("05", "Validasi Produk", "Jangan mengarang angka. Evaluasi 10 foto belum
     x: 0.85, y: 4.15, w: 11, h: 0.32,
     fontFace: FONT, fontSize: 14, color: C.brick, margin: 0,
   });
-  s.addText("Foundation Models selalu gagal di Simulator iOS 26. Di Simulator iOS 27, kalimatnya keluar.", {
+  s.addText("Model bahasa kadang menambah kata sendiri, misalnya “Fakta:” di depan kalimat. Karena itu kalimatnya dicek dulu, dan kalau tidak lolos, app memakai kalimat dari daftar kata.", {
     x: 0.85, y: 4.6, w: 11.5, h: 1.2,
-    fontFace: SERIF, fontSize: 26, color: C.ink, margin: 0,
+    fontFace: SERIF, fontSize: 22, color: C.ink, margin: 0, valign: "top",
   });
   footer(s, "Grup 5  ·  PantangMakan  ·  Jalur Tim");
   s.addNotes("Kalau 10 foto sudah dicoba sebelum naik, ganti angka di slide ini. Jangan isi angka yang belum dihitung.");
@@ -312,16 +308,16 @@ divider("06", "Rencana Pengembangan", "Satu langkah berikutnya saja. Jangan baha
     x: 0.95, y: 1.85, w: 11, h: 0.35,
     fontFace: FONT, fontSize: 14, color: C.brick, margin: 0,
   });
-  s.addText("Tambah data latih dari kemasan sungguhan.", {
+  s.addText("Lengkapi daftar nama bahan.", {
     x: 0.95, y: 2.4, w: 11, h: 0.7,
     fontFace: SERIF, fontSize: 36, color: C.ink, margin: 0,
   });
-  s.addText("Teks komposisi yang salah di Validasi Produk dimasukkan ke data latih\nCreate ML PantanganText, lalu model dilatih ulang dan dicoba lagi.", {
+  s.addText("Nama bahan dari kemasan yang salah dibaca di Validasi Produk\nditambahkan ke daftar kata, lalu kemasan yang sama dicoba lagi.", {
     x: 0.95, y: 3.35, w: 11, h: 1.3,
     fontFace: FONT, fontSize: 22, color: C.ink, margin: 0,
   });
   footer(s, "Grup 5  ·  PantangMakan  ·  Jalur Tim");
-  s.addNotes("Satu kalimat penutup: kemasan yang salah kami masukkan ke data latih Create ML, lalu latih ulang. Sebut contoh gagal dari slide Validasi kalau sudah ada. Tidak ada slide penutup.");
+  s.addNotes("Satu kalimat penutup: nama bahan dari kemasan yang salah kami tambahkan ke daftar kata, lalu dicoba lagi. Sebut contoh gagal dari slide Validasi. Tidak ada slide penutup.");
 }
 
 pres.writeFile({ fileName: __dirname + "/PantangMakan.pptx" })

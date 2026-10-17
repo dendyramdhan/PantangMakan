@@ -247,7 +247,7 @@ enum IngredientMatch {
             return ([], kalimatAman(dipilih))
         }
         let daftar = gabungNama(hits.map(\.kataDiKalimat))
-        return (hits, "Tidak aman, mengandung \(daftar).")
+        return (hits, "Ada \(daftar) di komposisi ini.")
     }
 
     private static func gabungNama(_ nama: [String]) -> String {
@@ -312,6 +312,6 @@ enum IngredientMatch {
 
     private static func kalimatAman(_ dipilih: Set<Pantangan>) -> String {
         let daftar = gabungNama(dipilih.sorted { $0.rawValue < $1.rawValue }.map(\.kataDiKalimat))
-        return "Aman, bisa kamu makan, tidak mengandung \(daftar)."
+        return "Tidak ditemukan \(daftar) di komposisi ini."
     }
 }

@@ -155,10 +155,11 @@ enum ScanService {
         guard !kalimat.isEmpty else { return nil }
         let lower = kalimat.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
         if hits.isEmpty {
-            guard lower.hasPrefix("aman"), lower.contains("tidak mengandung"), !lower.contains("tidak aman") else { return nil }
+            // Kata "aman" tidak boleh dipakai: app hanya melaporkan isi komposisi, bukan menjamin keamanan.
+            guard lower.hasPrefix("tidak ditemukan"), lower.contains("komposisi"), !lower.contains("aman") else { return nil }
             return kalimat
         }
-        guard lower.hasPrefix("tidak aman"), lower.contains("mengandung"), !lower.contains("tidak mengandung") else { return nil }
+        guard lower.hasPrefix("ada "), lower.contains("komposisi"), !lower.contains("tidak ditemukan"), !lower.contains("aman") else { return nil }
         for hit in hits where !lower.contains(hit.kataDiKalimat) {
             return nil
         }
