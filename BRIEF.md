@@ -15,7 +15,7 @@ Grup 5. Satu pengguna: yang sudah tahu pantangannya, huruf komposisi di bungkus 
 ## Yang tampil, berurutan
 
 1. Vision membaca teks dari foto. Fitur side-app.
-2. Create ML (`PemilahKalimat.mlmodel`) memilah kalimat: bahan, peringatan, lain. Fitur yang diajarkan, sesi 1.3.
+2. Model kustom PemilahKalimat (`PemilahKalimat.mlmodel`, dilatih dengan Create ML) memilah kalimat: bahan, peringatan, lain. Fitur yang diajarkan, sesi 1.3.
 3. Foundation Models menjelaskan kenapa. Fitur yang diajarkan, sesi 2.6. Hanya jalan di iPhone dengan Apple Intelligence, atau Simulator iOS 27.
 
 Tidak ada server. Semua jalan di perangkat.

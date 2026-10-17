@@ -11,7 +11,7 @@ ScanBite membaca foto daftar komposisi di kemasan, lalu memberi tahu apakah pant
 | AI | Buatan | Tugas | Kelompok di rubric |
 |---|---|---|---|
 | Vision | Apple | Membaca huruf dari foto | Side-app (baca teks dari foto) |
-| Create ML · `PemilahKalimat` | Kami latih sendiri | Memilah tiap kalimat label: bahan, peringatan, atau lain | Diajarkan, sesi 1.3 |
+| Model kustom `PemilahKalimat` (Create ML) | Kami latih sendiri | Memilah tiap kalimat label: bahan, peringatan, atau lain | Diajarkan, sesi 1.3 |
 | Foundation Models | Apple Intelligence | Menjelaskan arti bahan yang ditemukan | Diajarkan, sesi 2.6 |
 
 Merah atau hijau diputuskan oleh **daftar kata** (aturan, bukan AI), supaya app tidak pernah mengarang bahan. AI dipakai untuk membaca, memilah, dan menjelaskan.
@@ -49,7 +49,7 @@ Pilih pantangan → Foto label
 - Dipotong di titik (kecuali di angka seperti 3.7%), titik koma, bullet, " - ", dan **sebelum** frasa seperti "Dapat mengandung", "May contain", "Diproduksi menggunakan", "Allergen information".
 - Aturan ini sama persis dengan yang dipakai saat membuat data latih.
 
-### ④ Create ML memilah kalimat (`PemilahKalimat.mlmodel`)
+### ④ Model kustom PemilahKalimat memilah kalimat (`PemilahKalimat.mlmodel`)
 - Text classifier, dipanggil lewat Core ML dan NaturalLanguage (`NLModel`).
 - Label:
   - `bahan`: "Tepung terigu, gula, susu bubuk, garam" · "Allergen information: Contains Milk, Soy"
@@ -173,7 +173,7 @@ Dua yang diperbaiki Create ML:
 
 ## 6. Jawaban singkat untuk juri
 
-- **Pakai model apa?** Tiga, semua di perangkat. Vision untuk membaca teks foto, model Create ML buatan kami untuk memilah kalimat bahan dan "dapat mengandung", dan Foundation Models untuk menjelaskan.
+- **Pakai model apa?** Tiga, semua di perangkat. Vision untuk membaca teks foto, model kustom buatan kami bernama PemilahKalimat (dilatih dengan Create ML) untuk memilah kalimat bahan dan "dapat mengandung", dan Foundation Models untuk menjelaskan.
 - **Data latihnya?** 220 foto label produk Indonesia dari Open Food Facts, dibaca dengan Vision, jadi 940 kalimat yang dipakai setelah dibersihkan. Dibagi train, validation, dan test per produk. Akurasi test 85,9%.
 - **Kenapa keputusannya bukan AI?** Supaya tidak ada bahan yang dikarang. AI membaca, memilah, dan menjelaskan. Pantangan dicocokkan dengan daftar yang pasti.
 - **Kalau Apple Intelligence mati?** Kartu tetap jalan, hanya penjelasan yang tidak muncul.

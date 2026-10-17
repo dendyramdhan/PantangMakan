@@ -117,14 +117,14 @@ divider("02", "Masalah yang Kami Selesaikan", "Huruf komposisi terlalu kecil, da
 
 // --- 3 Solusi AI ---
 divider("03", "Solusi Berbasis AI", "Tiga fitur AI berurutan dalam satu foto.", cropRight("crop-hasil-ai.png", 1235 / 1260, "Bagian hasil AI di layar app"),
-  "Dua fitur diajarkan (Create ML, Foundation Models) dan satu dari side-app (baca teks dari foto). Semuanya jalan di perangkat.");
+  "Dua fitur diajarkan (model kustom PemilahKalimat dari Create ML, dan Foundation Models) dan satu dari side-app (baca teks dari foto). Semuanya jalan di perangkat.");
 {
   const s = pres.addSlide();
   bg(s);
   title(s, "Solusi Berbasis AI");
   const steps = [
     ["1", "Side-app  ·  baca teks dari foto", "Vision", "Membaca huruf di foto, bahasa Indonesia dan Inggris. Hanya teks di bawah judul Komposisi atau Ingredients."],
-    ["2", "Diajarkan  ·  sesi 1.3", "Create ML", "Model buatan kami memilah tiap kalimat: bahan, peringatan “dapat mengandung”, atau lain. Dilatih dari 940 kalimat 206 label sungguhan, akurasi test 85,9%."],
+    ["2", "Diajarkan  ·  sesi 1.3  ·  Create ML", "Model kustom: PemilahKalimat", "Model buatan kami, dilatih dengan Create ML. Memilah tiap kalimat: bahan, peringatan “dapat mengandung”, atau lain. Dilatih dari 940 kalimat 206 label sungguhan, akurasi test 85,9%."],
     ["3", "Diajarkan  ·  sesi 2.6", "Foundation Models", "Model bawaan Apple Intelligence menjelaskan kenapa, misalnya “Arachis hypogaea adalah nama ilmiah kacang tanah.”"],
   ];
   steps.forEach(([n, grup, judul, isi], i) => {
