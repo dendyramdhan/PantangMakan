@@ -124,7 +124,7 @@ divider("03", "Solusi Berbasis AI", "Tiga fitur AI berurutan dalam satu foto.", 
   title(s, "Solusi Berbasis AI");
   const steps = [
     ["1", "Side-app  ·  baca teks dari foto", "Vision", "Membaca huruf di foto, bahasa Indonesia dan Inggris. Hanya teks di bawah judul Komposisi atau Ingredients."],
-    ["2", "Diajarkan  ·  sesi 1.3", "Create ML", "Model buatan kami memilah tiap kalimat: bahan, peringatan “dapat mengandung”, atau lain. Dilatih dari 940 kalimat 206 label sungguhan, akurasi test 84,7%."],
+    ["2", "Diajarkan  ·  sesi 1.3", "Create ML", "Model buatan kami memilah tiap kalimat: bahan, peringatan “dapat mengandung”, atau lain. Dilatih dari 940 kalimat 206 label sungguhan, akurasi test 85,9%."],
     ["3", "Diajarkan  ·  sesi 2.6", "Foundation Models", "Model bawaan Apple Intelligence menjelaskan kenapa, misalnya “Arachis hypogaea adalah nama ilmiah kacang tanah.”"],
   ];
   steps.forEach(([n, grup, judul, isi], i) => {
@@ -193,7 +193,7 @@ divider("05", "Validasi Produk", "10 label sungguhan: 8 benar sebelum Create ML,
   });
   card(s, 0.55, 3.75, 12.25, 2.95);
   eyebrow(s, "LESSON LEARNED", 0.85, 3.98, 6);
-  s.addText("Label kemasan mencampur bahan dengan peringatan. Mencocokkan kata saja tidak cukup: kalimatnya perlu dipilah dulu. Model kami benar 84,7% di 144 kalimat test.", { x: 0.85, y: 4.35, w: 7.4, h: 2.1, fontFace: SERIF, fontSize: 19, color: C.ink, margin: 0, valign: "top" });
+  s.addText("Label kemasan mencampur bahan dengan peringatan. Mencocokkan kata saja tidak cukup: kalimatnya perlu dipilah dulu. Model kami benar 85,9% di 170 kalimat test.", { x: 0.85, y: 4.35, w: 7.4, h: 2.1, fontFace: SERIF, fontSize: 19, color: C.ink, margin: 0, valign: "top" });
   s.addImage({ path: FOTO + "07-8888166603431.jpg", x: 8.6, y: 3.98, w: 3.9, h: 3.9 * 1225 / 1889, altText: "Label Superco dengan kalimat dapat mengandung" });
   s.addText("Foto: Open Food Facts", { x: 8.6, y: 6.5, w: 3.9, h: 0.2, fontFace: FONT, fontSize: 9, color: C.muted, align: "right", margin: 0 });
   footer(s);

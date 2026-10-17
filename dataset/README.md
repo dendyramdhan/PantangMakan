@@ -18,7 +18,7 @@ App tidak pernah melihat teks label yang rapi. App hanya menerima teks hasil bac
 | 2 | Baca teks dengan Vision, pengaturan sama dengan app | `ocr.swift` → `ocr.json` | teks per foto |
 | 3 | Potong jadi kalimat (aturan sama dengan `Pemilah.swift`), beri label awal dengan kata kunci | `seg.py` → `kalimat-berlabel-awal.json` | 1.207 potongan |
 | 4 | Baca dan koreksi manual kalimat yang meragukan, buang yang tercampur | `fix.py` → `kalimat-berlabel.json` | 1.197 kalimat |
-| 5 | Buang potongan OCR yang rusak (kurang dari separuh katanya umum), lalu bagi per produk 70/15/15 | `bersihkan.py` | 940 kalimat dipakai, 257 dibuang (`kalimat-dibuang.csv`) |
+| 5 | Buang potongan OCR yang rusak (kurang dari separuh katanya umum), bagi per produk 70/15/15, lalu tambahkan salinan kalimat bahan tanpa judul "Komposisi:" (di app judul itu sudah terbuang sebelum masuk model) | `bersihkan.py` | 940 kalimat asli dipakai, 257 dibuang (`kalimat-dibuang.csv`), total 1.144 baris |
 | 6 | Latih dengan Create ML | `latih.swift` | `PemilahKalimat.mlmodel` |
 
 Contoh potongan yang dibuang di langkah 5: teks promo "ATA KELUARIN OCAP MANIS, BORENG", nomor kode produksi, merek yang tergabung seperti "TEHBOTOLSOSRO", dan tabel gizi berbahasa Belanda atau Jerman.
@@ -29,9 +29,9 @@ Dibagi **per produk**, jadi kalimat dari satu produk hanya ada di satu bagian. P
 
 | Bagian | Produk | Kalimat | bahan | peringatan | lain | Dipakai untuk |
 |---|---|---|---|---|---|---|
-| `kalimat-train.csv` | 145 | 657 | 304 | 46 | 307 | Belajar |
-| `kalimat-validation.csv` | 31 | 139 | 65 | 9 | 65 | Diukur Create ML selama latihan |
-| `kalimat-test.csv` | 30 | 144 | 60 | 8 | 76 | Angka akhir, tidak disentuh selama latihan |
+| `kalimat-train.csv` | 145 | 805 | 452 | 46 | 307 | Belajar |
+| `kalimat-validation.csv` | 31 | 169 | 95 | 9 | 65 | Diukur Create ML selama latihan |
+| `kalimat-test.csv` | 30 | 170 | 86 | 8 | 76 | Angka akhir, tidak disentuh selama latihan |
 
 ## Latih
 
@@ -44,11 +44,15 @@ swift dataset/latih.swift
 
 | Data | Benar | Akurasi |
 |---|---|---|
-| Train | 657 / 657 | 100% |
-| Validation | 126 / 139 | 90,6% |
-| **Test** | **122 / 144** | **84,7%** |
+| Train | 805 / 805 | 100% |
+| Validation | 155 / 169 | 91,7% |
+| **Test** | **146 / 170** | **85,9%** |
 
-Di test, ke-8 kalimat peringatan benar semua. Salah terbanyak adalah `lain` yang tertebak `bahan` (18), kebanyakan baris gizi bahasa Inggris seperti "Fat 18.1g/5g".
+Salah terbanyak di test adalah `lain` yang tertebak `bahan` (18), kebanyakan baris gizi bahasa Inggris seperti "Fat 18.1g/5g". Kesalahan ini jarang mengubah hasil karena baris itu biasanya tidak memuat nama pantangan.
+
+## Pengaman di app
+
+Model kadang menebak kalimat bahan yang memuat "kacang" sebagai `peringatan`, karena kata itu sering muncul di kalimat "dapat mengandung kacang". Supaya bahan pantangan tidak pernah tersembunyi, `Pemilah.swift` hanya menerima tebakan `peringatan` kalau kalimatnya memuat penanda seperti "dapat", "mungkin", "may", "diproduksi", atau "peralatan". Kalau tidak ada, kalimat dianggap `bahan`.
 
 ## Membuka di aplikasi Create ML
 

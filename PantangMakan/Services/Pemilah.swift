@@ -53,10 +53,21 @@ enum Pemilah {
             .filter { $0.count >= 4 }
     }
 
+    /// Kalimat peringatan selalu punya penanda seperti ini. Tanpa penanda, tebakan "peringatan"
+    /// tidak dipercaya, supaya bahan pantangan tidak pernah tersembunyi sebagai peringatan.
+    private static let penandaPeringatan = try! NSRegularExpression(
+        pattern: #"dapat|mungkin|bisa mengandung|may|might|can contain|trace|jejak|diproduksi|diproses|dibuat (?:di|pada|dengan)|produced|manufactured|processed|made (?:in|on)|fasilitas|facility|peralatan|equipment|memproses|processes|shared"#,
+        options: [.caseInsensitive]
+    )
+
     /// Tanpa model (gagal dimuat), semua kalimat dianggap bahan: perilaku lama, tidak ada yang terlewat.
     static func pilah(_ teks: String, model: NLModel?) -> [KalimatLabel] {
         potong(teks).map { kalimat in
-            let label = model?.predictedLabel(for: kalimat).flatMap(JenisKalimat.init(rawValue:)) ?? .bahan
+            var label = model?.predictedLabel(for: kalimat).flatMap(JenisKalimat.init(rawValue:)) ?? .bahan
+            let rentang = NSRange(kalimat.startIndex..., in: kalimat)
+            if label == .peringatan && penandaPeringatan.firstMatch(in: kalimat, range: rentang) == nil {
+                label = .bahan
+            }
             return KalimatLabel(teks: kalimat, jenis: label)
         }
     }

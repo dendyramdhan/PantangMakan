@@ -40,10 +40,22 @@ for kelompok in [sorted(ada_peringatan), sorted(set(kode) - ada_peringatan)]:
     for i, k in enumerate(kelompok):
         bagian[k] = "train" if i < n * 0.70 else ("validation" if i < n * 0.85 else "test")
 
+# Di app, judul "Komposisi:" sudah dibuang sebelum kalimat masuk ke model.
+# Jadi setiap kalimat bahan yang diawali judul ikut ditambahkan tanpa judulnya.
+JUDUL = re.compile(r"^\W*(?:komposisi|ingredients?|bahan(?:-bahan)?|daftar bahan)\b[^:]{0,15}:\s*", re.I)
+def tambah_tanpa_judul(isi):
+    hasil = list(isi)
+    for k, s, l in isi:
+        if l == "bahan" and JUDUL.search(s):
+            sisa = JUDUL.sub("", s).strip()
+            if len(sisa) >= 4:
+                hasil.append((k, sisa, l))
+    return hasil
+
 for nama in ["train", "validation", "test"]:
     with open(f"dataset/kalimat-{nama}.csv", "w", newline="") as f:
         w = csv.writer(f); w.writerow(["text", "label", "produk"])
-        isi = [(k, s, l) for k, s, l in bersih if bagian[k] == nama]
+        isi = tambah_tanpa_judul([(k, s, l) for k, s, l in bersih if bagian[k] == nama])
         for k, s, l in isi: w.writerow([s, l, k.replace(".jpg", "")])
         hit = collections.Counter(l for _, _, l in isi)
         print(f"{nama:10s} {sum(1 for x in kode if bagian[x]==nama):3d} produk  {len(isi):4d} kalimat  {dict(hit)}")

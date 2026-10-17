@@ -30,4 +30,4 @@ Tanpa Create ML: 8 dari 10. Dengan Create ML: 10 dari 10.
 
 Kedua kegagalan versi lama punya sebab yang sama: kalimat "Dapat mengandung telur, kedelai dan kacang" (Superco) dan "Diproduksi menggunakan peralatan yang juga memproses kacang pohon" (Oat M*lk) ikut dihitung sebagai bahan. Create ML memisahkannya jadi peringatan.
 
-Batas evaluasi ini: hanya 10 foto, dan foto Open Food Facts diambil pengguna lain, bukan kamera app. Akurasi model per kalimat ada di `dataset/README.md` (84,7% di 144 kalimat test).
+Batas evaluasi ini: hanya 10 foto, dan foto Open Food Facts diambil pengguna lain, bukan kamera app. Akurasi model per kalimat ada di `dataset/README.md` (85,9% di 170 kalimat test).
