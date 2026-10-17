@@ -130,7 +130,7 @@
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
 					DA8CED517DE3B3925BDA499E = {
-						DevelopmentTeam = R543KMB693;
+						DevelopmentTeam = MD9FTFBKQK;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -312,7 +312,7 @@
 				CODE_SIGNING_REQUIRED = NO;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = R543KMB693;
+				DEVELOPMENT_TEAM = MD9FTFBKQK;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = ScanBite;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Kamera dipakai untuk memfoto daftar komposisi pada kemasan.";
@@ -340,7 +340,7 @@
 				CODE_SIGNING_REQUIRED = NO;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = R543KMB693;
+				DEVELOPMENT_TEAM = MD9FTFBKQK;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = ScanBite;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Kamera dipakai untuk memfoto daftar komposisi pada kemasan.";
