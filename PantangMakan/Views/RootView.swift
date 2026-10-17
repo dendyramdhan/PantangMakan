@@ -263,6 +263,21 @@ struct ScanView: View {
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
+
+            // Hasil tiap fitur AI ditampilkan supaya juri bisa melihat semuanya di satu layar.
+            VStack(alignment: .leading, spacing: 6) {
+                Text("HASIL AI")
+                    .font(.pantangEyebrow)
+                    .foregroundStyle(Color.pantangMuted)
+                Text("Create ML: \(hasil.modelTeks)")
+                    .font(.pantangMeta)
+                    .foregroundStyle(Color.pantangInk)
+                Text("Kalimat dari: \(hasil.sumber)")
+                    .font(.pantangMeta)
+                    .foregroundStyle(Color.pantangInk)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .accessibilityElement(children: .combine)
         }
     }
 

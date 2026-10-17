@@ -144,50 +144,55 @@ divider("02", "Masalah yang Kami Selesaikan", "User sudah tahu pantangannya. Hur
   const s = pres.addSlide();
   bg(s);
   contentTitle(s, "Masalah yang Kami Selesaikan");
+  // Lima isi yang diminta template: pengguna, masalah, asal masalah, cara app menyelesaikan, dampak lain.
   const cards = [
-    { k: "Pengguna", t: "User sudah tahu pantangan makannya, alergi atau yang sengaja dihindari." },
-    { k: "Masalah", t: "Daftar komposisi di kemasan tertulis terlalu kecil, jadi bahan yang harus dihindari terlewat." },
-    { k: "Asal masalah", t: "Masalah ini datang dari user." },
-    { k: "Dampak lain", t: "Foto depan kemasan ditolak. App tidak menganggapnya aman atau tidak aman." },
+    { k: "Pengguna", t: "Orang yang sudah tahu pantangan makannya, karena alergi atau sengaja dihindari." },
+    { k: "Masalah", t: "Huruf daftar komposisi di kemasan terlalu kecil, jadi bahan pantangan terlewat." },
+    { k: "Asal masalah", t: "Dari pengguna nyata yang punya pantangan. Ia harus membalik bungkus dan membaca komposisi satu per satu." },
+    { k: "Cara app menyelesaikannya", t: "Pilih pantangan sekali, foto komposisi, lalu baca satu kalimat: aman atau tidak aman." },
+    { k: "Dampak lain", t: "Nama bahan asing ikut dikenali. Arachis hypogaea terbaca sebagai kacang, jadi user tidak perlu hafal nama Latin atau Inggris.", wide: true },
   ];
+  const cardH = 1.62;
+  const gapY = 0.2;
   cards.forEach((card, i) => {
     const col = i % 2;
     const row = Math.floor(i / 2);
     const x = 0.55 + col * 6.35;
-    const y = 1.25 + row * 2.35;
+    const y = 1.15 + row * (cardH + gapY);
+    const w = card.wide ? 12.4 : 6.05;
     s.addShape(pres.shapes.ROUNDED_RECTANGLE, {
-      x, y, w: 6.05, h: 2.1,
-      fill: { color: C.card }, rectRadius: 0.12,
+      x, y, w, h: cardH,
+      fill: { color: card.wide ? C.greenBg : C.card }, rectRadius: 0.12,
     });
     s.addText(card.k, {
-      x: x + 0.3, y: y + 0.28, w: 5.4, h: 0.35,
-      fontFace: FONT, fontSize: 13, color: C.brick, margin: 0,
+      x: x + 0.3, y: y + 0.22, w: w - 0.6, h: 0.32,
+      fontFace: FONT, fontSize: 13, color: card.wide ? C.green : C.brick, margin: 0,
     });
     s.addText(card.t, {
-      x: x + 0.3, y: y + 0.75, w: 5.4, h: 1.05,
-      fontFace: FONT, fontSize: 18, color: C.ink, margin: 0,
+      x: x + 0.3, y: y + 0.6, w: w - 0.6, h: 0.85,
+      fontFace: FONT, fontSize: 18, color: C.ink, margin: 0, valign: "top",
     });
   });
   footer(s, "Grup 5  ·  PantangMakan  ·  Jalur Tim");
-  s.addNotes("User memilih pantangan, memfoto daftar komposisi, lalu membaca satu kalimat. Foto kedua mengganti kalimat tanpa menutup app.");
+  s.addNotes("Buka dengan cerita satu orang sebelum fitur (syarat D4 Skilled). Sebut nama dan pantangan orang sungguhan yang kalian kenal, jangan dikarang. Contoh alur: dia di minimarket, membalik bungkus selai, huruf komposisinya kecil. Lalu: pilih pantangan sekali, foto, baca satu kalimat. Dampak lain: arachis hypogaea dikenali sebagai kacang.");
 }
 
-divider("03", "Solusi Berbasis AI", "Sebut kelompoknya: diajarkan atau side-app. Jangan bilang semuanya on-device. Create ML dipanggil, labelnya tidak tampil. Kartu hijau dan merah dari daftar kata sesuai pilihan user.");
+divider("03", "Solusi Berbasis AI", "Sebut kelompoknya: dua diajarkan (Create ML, Foundation Models) dan dua side-app (baca teks dari foto, API). Jangan bilang semuanya on-device. Di layar hasil, tunjuk bagian HASIL AI.");
 
 {
   const s = pres.addSlide();
   bg(s);
   contentTitle(s, "Solusi Berbasis AI");
   const steps = [
-    { n: "1", grup: "Membaca foto", judul: "Vision", isi: "Membaca huruf di foto, bahasa Indonesia dan Inggris. Hanya teks di bawah judul Komposisi, Ingredients, atau Daftar bahan." },
-    { n: "2", grup: "Diajarkan  ·  sesi 1.3", judul: "Create ML", isi: "Model PantanganText mengklasifikasi teks komposisi di perangkat, lewat Core ML. Labelnya tidak tampil di layar." },
-    { n: "3", grup: "Diajarkan  ·  sesi 2.6", judul: "Foundation Models", isi: "System Language Model, bawaan Apple Intelligence, menyusun kalimat. Hanya jalan kalau fiturnya menyala." },
-    { n: "4", grup: "Side-app", judul: "Model di server", isi: "Kalau model Apple tidak tersedia, side-app menyusun kalimat yang sama. Kalau gagal, kalimat tetap keluar dari daftar kata." },
+    { n: "1", grup: "Side-app  ·  baca teks dari foto", judul: "Vision", isi: "Membaca huruf di foto, bahasa Indonesia dan Inggris. Hanya teks di bawah judul Komposisi, Ingredients, atau Daftar bahan." },
+    { n: "2", grup: "Diajarkan  ·  sesi 1.3", judul: "Create ML", isi: "Model PantanganText mengklasifikasi teks komposisi lewat Core ML. Labelnya tampil di layar hasil, misalnya kacang 92%." },
+    { n: "3", grup: "Diajarkan  ·  sesi 2.6", judul: "Foundation Models", isi: "System Language Model bawaan Apple Intelligence menyusun kalimat aman atau tidak aman." },
+    { n: "4", grup: "Side-app  ·  model di server", judul: "API Dicoding", isi: "Kalau model Apple tidak tersedia, gpt-oss-20b menyusun kalimat yang sama. Kalau internet mati, kalimat tetap keluar dan ada tombol Coba lagi." },
   ];
   steps.forEach((step, i) => {
     const x = 0.5 + i * 3.2;
     s.addShape(pres.shapes.ROUNDED_RECTANGLE, {
-      x, y: 1.2, w: 3.02, h: 4.55,
+      x, y: 1.2, w: 3.02, h: 4.3,
       fill: { color: C.card }, rectRadius: 0.12,
     });
     s.addText(step.n, {
@@ -203,12 +208,12 @@ divider("03", "Solusi Berbasis AI", "Sebut kelompoknya: diajarkan atau side-app.
       fontFace: SERIF, fontSize: 22, color: C.ink, margin: 0,
     });
     s.addText(step.isi, {
-      x: x + 0.22, y: 3.4, w: 2.58, h: 2.05,
+      x: x + 0.22, y: 3.4, w: 2.58, h: 1.9, valign: "top",
       fontFace: FONT, fontSize: 14, color: C.ink, margin: 0,
     });
   });
   footer(s, "Keputusan kartu: daftar kata, sesuai pantangan yang user pilih.");
-  s.addNotes("Kartu hijau dan merah bukan dari Create ML. User pilih garam, kemasan tidak memuat garam: Aman, bisa kamu makan, tidak mengandung garam. Ada arachis dan user pilih kacang: Tidak aman, mengandung kacang. System Language Model hanya menyusun kalimat itu.");
+  s.addNotes("Urutan di app: foto, Vision membaca teks, Create ML memberi label (tampil di HASIL AI), Foundation Models menyusun kalimat; API Dicoding hanya kalau model Apple tidak ada. Warna kartu tetap dari daftar kata sesuai pantangan user. User pilih garam, kemasan tidak memuat garam: Aman, bisa kamu makan, tidak mengandung garam. Ada arachis dan user pilih kacang: Tidak aman, mengandung kacang. System Language Model hanya menyusun kalimat itu.");
 }
 
 divider("04", "Demo Produk", "Saat bagian ini, pindah ke iPhone. Urutan: happy path merah, foto ulang jadi hijau, lalu foto yang bukan komposisi ditolak. Jangan tutup app di antara foto pertama dan kedua.");
@@ -254,9 +259,9 @@ divider("05", "Validasi Produk", "Jangan mengarang angka. Evaluasi 10 foto belum
   bg(s);
   contentTitle(s, "Validasi Produk");
   const stats = [
-    { k: "Input yang dicoba", v: "—", d: "10 foto, belum dijalankan" },
-    { k: "Berhasil", v: "—", d: "Belum diisi" },
-    { k: "Contoh yang gagal", v: "—", d: "Belum ada contoh" },
+    { k: "Input yang dicoba", v: "—", d: "Isi: jumlah foto kemasan sungguhan" },
+    { k: "Berhasil", v: "—", d: "Isi: berapa yang kalimatnya benar" },
+    { k: "Contoh yang gagal", v: "—", d: "Isi: satu kemasan yang salah dan sebabnya" },
   ];
   stats.forEach((item, i) => {
     const x = 0.55 + i * 4.2;
@@ -300,23 +305,23 @@ divider("06", "Rencana Pengembangan", "Satu langkah berikutnya saja. Jangan baha
   bg(s);
   contentTitle(s, "Rencana Pengembangan");
   s.addShape(pres.shapes.ROUNDED_RECTANGLE, {
-    x: 0.55, y: 1.45, w: 12.2, h: 4.4,
+    x: 0.55, y: 1.45, w: 12.2, h: 3.6,
     fill: { color: C.card }, rectRadius: 0.12,
   });
   s.addText("Langkah berikutnya", {
     x: 0.95, y: 1.85, w: 11, h: 0.35,
     fontFace: FONT, fontSize: 14, color: C.brick, margin: 0,
   });
-  s.addText("Foto 10 kemasan sungguhan.", {
+  s.addText("Tambah data latih dari kemasan sungguhan.", {
     x: 0.95, y: 2.4, w: 11, h: 0.7,
     fontFace: SERIF, fontSize: 36, color: C.ink, margin: 0,
   });
-  s.addText("Catat berapa yang benar dan satu contoh yang gagal.\nAngka itu mengisi bagian Validasi Produk.", {
+  s.addText("Teks komposisi yang salah di Validasi Produk dimasukkan ke data latih\nCreate ML PantanganText, lalu model dilatih ulang dan dicoba lagi.", {
     x: 0.95, y: 3.35, w: 11, h: 1.3,
     fontFace: FONT, fontSize: 22, color: C.ink, margin: 0,
   });
   footer(s, "Grup 5  ·  PantangMakan  ·  Jalur Tim");
-  s.addNotes("Satu kalimat penutup: kami cek 10 kemasan sungguhan, lalu catat yang benar dan satu yang gagal. Selesai. Tidak ada slide penutup.");
+  s.addNotes("Satu kalimat penutup: kemasan yang salah kami masukkan ke data latih Create ML, lalu latih ulang. Sebut contoh gagal dari slide Validasi kalau sudah ada. Tidak ada slide penutup.");
 }
 
 pres.writeFile({ fileName: __dirname + "/PantangMakan.pptx" })

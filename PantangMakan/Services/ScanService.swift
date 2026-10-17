@@ -105,7 +105,8 @@ enum ScanService {
         }
         let hyps = nl.predictedLabelHypotheses(for: bersih.lowercased(), maximumCount: 1)
         guard let top = hyps.max(by: { $0.value < $1.value }) else { return "Tidak dikenali" }
-        return "\(top.key) \(Int(top.value * 100))%"
+        let label = top.key == "tidak" ? "tanpa pantangan" : top.key
+        return "\(label) \(Int(top.value * 100))%"
     }
 
     private static func phraseWithFoundationModel(fakta: String, hits: [Pantangan]) async -> String? {
