@@ -264,12 +264,11 @@ struct ScanView: View {
                 Text("HASIL AI")
                     .font(.pantangEyebrow)
                     .foregroundStyle(Color.pantangMuted)
-                Text("Create ML memilah \(hasil.jumlah[.bahan] ?? 0) kalimat bahan, \(hasil.jumlah[.peringatan] ?? 0) peringatan, \(hasil.jumlah[.lain] ?? 0) lain")
-                    .font(.pantangMeta)
-                    .foregroundStyle(Color.pantangInk)
-                Text(hasil.statusModel)
-                    .font(.pantangMeta)
-                    .foregroundStyle(Color.pantangInk)
+                BarisAI(
+                    nama: "Pemilah Kalimat · model kami",
+                    hasil: "\(hasil.jumlah[.bahan] ?? 0) bahan · \(hasil.jumlah[.peringatan] ?? 0) peringatan · \(hasil.jumlah[.lain] ?? 0) lain"
+                )
+                BarisAI(nama: "Penjelasan · Apple Foundation Models", hasil: hasil.statusModel)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .accessibilityElement(children: .combine)
@@ -604,6 +603,24 @@ private struct DeniedBanner: View {
         .overlay(alignment: .leading) {
             Rectangle().fill(Color.pantangAccent).frame(width: 2)
         }
+    }
+}
+
+/// Satu baris di bagian HASIL AI: nama model di atas, hasilnya di bawah.
+private struct BarisAI: View {
+    let nama: String
+    let hasil: String
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 2) {
+            Text(nama)
+                .font(.system(size: 14, weight: .semibold))
+                .foregroundStyle(Color.pantangInk)
+            Text(hasil)
+                .font(.pantangMeta)
+                .foregroundStyle(Color.pantangMuted)
+        }
+        .padding(.top, 2)
     }
 }
 

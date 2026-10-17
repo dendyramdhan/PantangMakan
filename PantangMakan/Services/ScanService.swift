@@ -81,23 +81,23 @@ enum ScanService {
         teksBahan: String, teksPeringatan: String
     ) async -> (String?, String) {
         guard !(hits.isEmpty && mungkin.isEmpty) else {
-            return (nil, "Foundation Models: tidak ada pantangan untuk dijelaskan")
+            return (nil, "tidak ada pantangan untuk dijelaskan")
         }
         let model = SystemLanguageModel.default
         switch model.availability {
         case .available:
             break
         case .unavailable(.deviceNotEligible):
-            return (nil, "Foundation Models tidak tersedia: iPhone ini tidak mendukung Apple Intelligence")
+            return (nil, "tidak tersedia, iPhone tidak mendukung Apple Intelligence")
         case .unavailable(.appleIntelligenceNotEnabled):
-            return (nil, "Foundation Models tidak tersedia: Apple Intelligence belum dinyalakan")
+            return (nil, "tidak tersedia, Apple Intelligence belum dinyalakan")
         case .unavailable(.modelNotReady):
-            return (nil, "Foundation Models tidak tersedia: model Apple Intelligence masih diunduh")
+            return (nil, "tidak tersedia, model masih diunduh")
         case .unavailable(let alasan):
-            return (nil, "Foundation Models tidak tersedia: \(alasan)")
+            return (nil, "tidak tersedia, \(alasan)")
         }
         if !model.supportsLocale() {
-            return (nil, "Foundation Models tidak mendukung bahasa iPhone (\(Locale.current.identifier)). Ganti bahasa iPhone ke English")
+            return (nil, "bahasa iPhone (\(Locale.current.identifier)) tidak didukung")
         }
         var jumlahKata = mungkin.count
         var faktaID: [String] = []
@@ -135,14 +135,14 @@ enum ScanService {
             let reply = try await sessionID.respond(to: "Fakta:\n" + faktaID.joined(separator: "\n")).content
             guard let teks = diterima(reply, boleh: boleh, maksKalimat: maks, inggris: false) else {
                 print("PANTANG FM ditolak: \(reply)")
-                return (nil, "Penjelasan Foundation Models ditolak pengecek")
+                return (nil, "jawaban ditolak pengecek")
             }
-            return (teks, "Penjelasan dari Foundation Models (bahasa Indonesia) · \(diagnosa)")
+            return (teks, "bahasa Indonesia")
         } catch LanguageModelSession.GenerationError.unsupportedLanguageOrLocale {
             print("PANTANG FM: bahasa Indonesia ditolak, coba bahasa Inggris")
         } catch {
             print("PANTANG FM error: \(error)")
-            return (nil, "Foundation Models gagal: \(error.localizedDescription)")
+            return (nil, "gagal, \(error.localizedDescription)")
         }
 
         let sessionEN = LanguageModelSession(instructions: """
@@ -160,12 +160,12 @@ enum ScanService {
             let reply = try await sessionEN.respond(to: "Facts:\n" + faktaEN.joined(separator: "\n")).content
             guard let teks = diterima(reply, boleh: boleh, maksKalimat: maks, inggris: true) else {
                 print("PANTANG FM ditolak (EN): \(reply)")
-                return (nil, "Penjelasan Foundation Models ditolak pengecek")
+                return (nil, "jawaban ditolak pengecek")
             }
-            return (teks, "Penjelasan dari Foundation Models (bahasa Inggris) · \(diagnosa)")
+            return (teks, "bahasa Inggris")
         } catch {
             print("PANTANG FM error (EN): \(error)")
-            return (nil, "Foundation Models gagal: \(error.localizedDescription)")
+            return (nil, "gagal, \(error.localizedDescription)")
         }
     }
 
