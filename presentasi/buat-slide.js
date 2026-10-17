@@ -248,16 +248,16 @@ divider("04", "Demo Produk", "Saat bagian ini, pindah ke iPhone. Urutan: happy p
   s.addNotes("Di iPhone: pilih kacang dan pemanis, foto komposisi yang memuat kacang dan gula. Lalu tekan Ubah, pilih garam, dan foto komposisi teh: kartu hijau. Terakhir foto depan kemasan: Ditolak. Izin kamera ditolak juga bisa ditunjukkan: pita kiri dan Buka Pengaturan.");
 }
 
-divider("05", "Validasi Produk", "Jangan mengarang angka. Evaluasi 10 foto belum dijalankan. Lesson learned: model bahasa kadang menambah kata sendiri, jadi kalimatnya dicek dulu.");
+divider("05", "Validasi Produk", "10 foto label sungguhan, 8 benar. Dua yang salah karena kalimat dapat mengandung ikut terbaca.");
 
 {
   const s = pres.addSlide();
   bg(s);
   contentTitle(s, "Validasi Produk");
   const stats = [
-    { k: "Input yang dicoba", v: "—", d: "" },
-    { k: "Berhasil", v: "—", d: "" },
-    { k: "Contoh yang gagal", v: "—", d: "" },
+    { k: "Input yang dicoba", v: "10 foto", d: "Label komposisi produk Indonesia, enam pantangan dipilih" },
+    { k: "Berhasil", v: "8 dari 10", d: "Pantangan yang disebut sama dengan isi label" },
+    { k: "Contoh yang gagal", v: "Superco", d: "“Dapat mengandung telur dan kacang” dihitung sebagai bahan" },
   ];
   stats.forEach((item, i) => {
     const x = 0.55 + i * 4.2;
@@ -274,8 +274,8 @@ divider("05", "Validasi Produk", "Jangan mengarang angka. Evaluasi 10 foto belum
       fontFace: SERIF, fontSize: 36, color: C.ink, margin: 0,
     });
     s.addText(item.d, {
-      x: x + 0.28, y: 2.85, w: 3.4, h: 0.35,
-      fontFace: FONT, fontSize: 14, color: C.brick, margin: 0,
+      x: x + 0.28, y: 2.75, w: 3.4, h: 0.65,
+      fontFace: FONT, fontSize: 13, color: C.muted, margin: 0, valign: "top",
     });
   });
   s.addShape(pres.shapes.ROUNDED_RECTANGLE, {
@@ -286,12 +286,23 @@ divider("05", "Validasi Produk", "Jangan mengarang angka. Evaluasi 10 foto belum
     x: 0.85, y: 4.15, w: 11, h: 0.32,
     fontFace: FONT, fontSize: 14, color: C.brick, margin: 0,
   });
-  s.addText("Model bahasa kadang menambah kata sendiri, misalnya “Fakta:” di depan kalimat. Karena itu kalimatnya dicek dulu, dan kalau tidak lolos, app memakai kalimat dari daftar kata.", {
-    x: 0.85, y: 4.6, w: 11.5, h: 1.2,
-    fontFace: SERIF, fontSize: 22, color: C.ink, margin: 0, valign: "top",
+  s.addText("Kedua kegagalan punya sebab yang sama: kalimat peringatan di bawah komposisi, seperti “dapat mengandung” atau “diproses dengan peralatan yang juga memproses kacang”, ikut terbaca sebagai bahan.", {
+    x: 0.85, y: 4.6, w: 7.6, h: 1.5,
+    fontFace: SERIF, fontSize: 20, color: C.ink, margin: 0, valign: "top",
+  });
+  // Foto label Superco: bukti contoh gagal (Open Food Facts, CC BY-SA).
+  s.addImage({
+    path: __dirname + "/../validasi/foto/07-8888166603431.jpg",
+    x: 8.85, y: 4.1, w: 3.0, h: 1.95,
+    sizing: { type: "cover", w: 3.0, h: 1.95 },
+    altText: "Label komposisi Superco dengan kalimat Dapat mengandung telur, kedelai dan kacang",
+  });
+  s.addText("Foto: Open Food Facts", {
+    x: 8.85, y: 6.08, w: 3.0, h: 0.2,
+    fontFace: FONT, fontSize: 9, color: C.muted, margin: 0, align: "right",
   });
   footer(s, "Grup 5  ·  PantangMakan  ·  Jalur Tim");
-  s.addNotes("Kalau 10 foto sudah dicoba sebelum naik, ganti angka di slide ini. Jangan isi angka yang belum dihitung.");
+  s.addNotes("Sumber foto: Open Food Facts, 10 produk Indonesia (Teh Pucuk, Ultra Milk, Oat M*lk, Indomie, Oreo, Energen, Superco, Choki Choki, Del Monte BBQ, Roma Kelapa). Detail di validasi/HASIL.md. Gagal kedua: Oat M*lk, kacang terbaca dari catatan peralatan produksi.");
 }
 
 divider("06", "Rencana Pengembangan", "Satu langkah berikutnya saja. Jangan bahas bisnis atau pasar.");
@@ -308,16 +319,16 @@ divider("06", "Rencana Pengembangan", "Satu langkah berikutnya saja. Jangan baha
     x: 0.95, y: 1.85, w: 11, h: 0.35,
     fontFace: FONT, fontSize: 14, color: C.brick, margin: 0,
   });
-  s.addText("Lengkapi daftar nama bahan.", {
+  s.addText("Pisahkan kalimat “dapat mengandung”.", {
     x: 0.95, y: 2.4, w: 11, h: 0.7,
     fontFace: SERIF, fontSize: 36, color: C.ink, margin: 0,
   });
-  s.addText("Nama bahan dari kemasan yang salah dibaca di Validasi Produk\nditambahkan ke daftar kata, lalu kemasan yang sama dicoba lagi.", {
+  s.addText("Bahan di daftar komposisi tetap jadi kartu merah. Kalimat “dapat mengandung”\njadi peringatan terpisah, lalu Superco dan Oat M*lk dicoba lagi.", {
     x: 0.95, y: 3.35, w: 11, h: 1.3,
     fontFace: FONT, fontSize: 22, color: C.ink, margin: 0,
   });
   footer(s, "Grup 5  ·  PantangMakan  ·  Jalur Tim");
-  s.addNotes("Satu kalimat penutup: nama bahan dari kemasan yang salah kami tambahkan ke daftar kata, lalu dicoba lagi. Sebut contoh gagal dari slide Validasi. Tidak ada slide penutup.");
+  s.addNotes("Satu kalimat penutup: kalimat dapat mengandung kami pisahkan jadi peringatan, lalu dua kemasan yang gagal dicoba lagi. Tidak ada slide penutup.");
 }
 
 pres.writeFile({ fileName: __dirname + "/PantangMakan.pptx" })
