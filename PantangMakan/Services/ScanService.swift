@@ -114,6 +114,8 @@ enum ScanService {
             faktaEN.append("\(p.namaInggris) only appears in a may-contain statement")
         }
         let maks = min(3, jumlahKata)
+        let diagnosa = Self.diagnosaBahasa(model)
+        print("PANTANG FM diagnosa: \(diagnosa)")
         let boleh = Set(hits + mungkin)
 
         // Coba bahasa Indonesia dulu. Di iPhone fisik, Foundation Models menolak teks Indonesia
@@ -135,7 +137,7 @@ enum ScanService {
                 print("PANTANG FM ditolak: \(reply)")
                 return (nil, "Penjelasan Foundation Models ditolak pengecek")
             }
-            return (teks, "Penjelasan dari Foundation Models")
+            return (teks, "Penjelasan dari Foundation Models (bahasa Indonesia) · \(diagnosa)")
         } catch LanguageModelSession.GenerationError.unsupportedLanguageOrLocale {
             print("PANTANG FM: bahasa Indonesia ditolak, coba bahasa Inggris")
         } catch {
@@ -160,11 +162,22 @@ enum ScanService {
                 print("PANTANG FM ditolak (EN): \(reply)")
                 return (nil, "Penjelasan Foundation Models ditolak pengecek")
             }
-            return (teks, "Penjelasan dari Foundation Models (bahasa Inggris)")
+            return (teks, "Penjelasan dari Foundation Models (bahasa Inggris) · \(diagnosa)")
         } catch {
             print("PANTANG FM error (EN): \(error)")
             return (nil, "Foundation Models gagal: \(error.localizedDescription)")
         }
+    }
+
+    /// Ringkasan untuk mencari tahu kenapa bahasa Indonesia diterima di satu iPhone dan ditolak di iPhone lain.
+    private static func diagnosaBahasa(_ model: SystemLanguageModel) -> String {
+        let indo = model.supportsLocale(Locale(identifier: "id_ID")) ? "ya" : "tidak"
+        let region = Locale.current.region?.identifier ?? "?"
+        let bahasa = model.supportedLanguages
+            .compactMap { $0.languageCode?.identifier }
+            .sorted()
+            .joined(separator: ",")
+        return "Indonesia didukung: \(indo), region \(region), bahasa model: \(bahasa)"
     }
 
     /// Penjelasan ditolak kalau memakai kata "aman", terlalu panjang, atau menyebut pantangan lain.
