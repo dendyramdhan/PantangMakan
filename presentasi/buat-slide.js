@@ -124,7 +124,7 @@ divider("03", "Solusi Berbasis AI", "Tiga fitur AI berurutan dalam satu foto.", 
   title(s, "Solusi Berbasis AI");
   const steps = [
     ["1", "Side-app  ·  baca teks dari foto", "Vision", "Membaca huruf di foto, bahasa Indonesia dan Inggris. Hanya teks di bawah judul Komposisi atau Ingredients."],
-    ["2", "Diajarkan  ·  sesi 1.3", "Create ML", "Model buatan kami memilah tiap kalimat: bahan, peringatan “dapat mengandung”, atau lain. Dilatih dari 1.197 kalimat 220 label sungguhan."],
+    ["2", "Diajarkan  ·  sesi 1.3", "Create ML", "Model buatan kami memilah tiap kalimat: bahan, peringatan “dapat mengandung”, atau lain. Dilatih dari 940 kalimat 206 label sungguhan, akurasi test 84,7%."],
     ["3", "Diajarkan  ·  sesi 2.6", "Foundation Models", "Model bawaan Apple Intelligence menjelaskan kenapa, misalnya “Arachis hypogaea adalah nama ilmiah kacang tanah.”"],
   ];
   steps.forEach(([n, grup, judul, isi], i) => {
@@ -193,7 +193,7 @@ divider("05", "Validasi Produk", "10 label sungguhan: 8 benar sebelum Create ML,
   });
   card(s, 0.55, 3.75, 12.25, 2.95);
   eyebrow(s, "LESSON LEARNED", 0.85, 3.98, 6);
-  s.addText("Label kemasan mencampur bahan dengan peringatan. Mencocokkan kata saja tidak cukup: kalimatnya perlu dipilah dulu. Model kami benar 90,4% di 230 kalimat uji.", { x: 0.85, y: 4.35, w: 7.4, h: 2.1, fontFace: SERIF, fontSize: 19, color: C.ink, margin: 0, valign: "top" });
+  s.addText("Label kemasan mencampur bahan dengan peringatan. Mencocokkan kata saja tidak cukup: kalimatnya perlu dipilah dulu. Model kami benar 84,7% di 144 kalimat test.", { x: 0.85, y: 4.35, w: 7.4, h: 2.1, fontFace: SERIF, fontSize: 19, color: C.ink, margin: 0, valign: "top" });
   s.addImage({ path: FOTO + "07-8888166603431.jpg", x: 8.6, y: 3.98, w: 3.9, h: 3.9 * 1225 / 1889, altText: "Label Superco dengan kalimat dapat mengandung" });
   s.addText("Foto: Open Food Facts", { x: 8.6, y: 6.5, w: 3.9, h: 0.2, fontFace: FONT, fontSize: 9, color: C.muted, align: "right", margin: 0 });
   footer(s);
@@ -212,7 +212,7 @@ divider("06", "Rencana Pengembangan", "Satu langkah berikutnya.", null, "Satu la
   s.addText("Validasi kali ini memakai foto dari Open Food Facts. Berikutnya kami foto sendiri di minimarket, termasuk huruf yang lengkung atau mengkilap, lalu kalimat yang salah dipilah ditambahkan ke data latih Create ML.", { x: 0.95, y: 3.45, w: 6.9, h: 2.0, fontFace: FONT, fontSize: 17, color: C.ink, margin: 0, valign: "top" });
   card(s, 8.45, 1.25, 4.35, 3.9, C.amberBg);
   eyebrow(s, "KENAPA INI", 8.75, 1.6, 3.8, C.ink);
-  s.addText("Data latih dan uji sekarang berasal dari 230 foto Open Food Facts. Kamera iPhone di rak toko memberi sudut, cahaya, dan pantulan yang belum pernah dilihat model.", { x: 8.75, y: 2.0, w: 3.8, h: 3.5, fontFace: FONT, fontSize: 16, color: C.ink, margin: 0, valign: "top" });
+  s.addText("Data latih dan uji sekarang berasal dari foto Open Food Facts. Kamera iPhone di rak toko memberi sudut, cahaya, dan pantulan yang belum pernah dilihat model.", { x: 8.75, y: 2.0, w: 3.8, h: 3.5, fontFace: FONT, fontSize: 16, color: C.ink, margin: 0, valign: "top" });
   footer(s);
   s.addNotes("Penutup satu kalimat: berikutnya kami uji 30 kemasan dari kamera iPhone sendiri, lalu kalimat yang salah masuk ke data latih. Tidak ada slide penutup.");
 }

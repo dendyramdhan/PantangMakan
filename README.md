@@ -9,7 +9,7 @@ Pengguna memilih pantangan makannya (susu, kacang, telur, gluten, pemanis, garam
 ## Fitur AI dalam satu alur
 
 1. **Vision** membaca teks dari foto, hanya bagian di bawah judul Komposisi atau Ingredients. Foto yang bukan daftar komposisi ditolak.
-2. **Create ML** (`PemilahKalimat.mlmodel`, text classifier lewat Core ML) memilah tiap kalimat: `bahan`, `peringatan`, atau `lain`. Daftar kata hanya mencocokkan pantangan di kalimat `bahan`. Dilatih dari 1.197 kalimat 220 label produk Indonesia (Open Food Facts), akurasi uji 90,4%. Lihat [`dataset/`](dataset/README.md).
+2. **Create ML** (`PemilahKalimat.mlmodel`, text classifier lewat Core ML) memilah tiap kalimat: `bahan`, `peringatan`, atau `lain`. Daftar kata hanya mencocokkan pantangan di kalimat `bahan`. Dilatih dengan Create ML (maxEnt) dari 940 kalimat 206 label produk Indonesia (Open Food Facts), dibagi train/validation/test per produk. Akurasi test 84,7%. Lihat [`dataset/`](dataset/README.md).
 3. **Foundation Models** (System Language Model, Apple Intelligence) menjelaskan kenapa, misalnya "Arachis hypogaea adalah nama ilmiah kacang tanah." Penjelasan dicek dulu: tidak boleh memakai kata "aman" atau menyebut pantangan lain. Kalau Apple Intelligence mati, penjelasan tidak tampil dan kartu tetap jalan.
 
 ## Validasi
