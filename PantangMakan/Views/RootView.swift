@@ -174,7 +174,7 @@ struct ScanView: View {
                 }
 
                 if let gambarTerakhir {
-                    CapturedPhoto(image: gambarTerakhir)
+                    CapturedPhoto(image: gambarTerakhir, ringkas: hasil != nil)
                 }
 
                 if sedang {
@@ -191,7 +191,6 @@ struct ScanView: View {
                 }
 
                 if gambarTerakhir != nil {
-                    PrimaryButton(title: "Foto ulang", systemImage: "arrow.clockwise", imageOnTrailing: false, centeredIcon: true, action: mintaKamera)
                     if izinDitolak {
                         DeniedBanner(bukaPengaturan: bukaPengaturan)
                     }
@@ -210,6 +209,19 @@ struct ScanView: View {
             .padding(20)
         }
         .background(Color.pantangBg)
+        .safeAreaInset(edge: .bottom) {
+            if gambarTerakhir != nil && !sedang {
+                PrimaryButton(title: "Foto ulang", systemImage: "arrow.clockwise", imageOnTrailing: false, centeredIcon: true, action: mintaKamera)
+                    .padding(.horizontal, 20)
+                    .padding(.top, 12)
+                    .padding(.bottom, 8)
+                    .background {
+                        Color.pantangBg
+                            .ignoresSafeArea(edges: .bottom)
+                            .overlay(alignment: .top) { Divider().overlay(Color.pantangLine) }
+                    }
+            }
+        }
         .sheet(isPresented: $bukaKamera) {
             CameraPicker { image in
                 Task { await proses(image) }
@@ -259,53 +271,59 @@ struct ScanView: View {
         }
 
         if !hasil.ditolak {
-            // Hasil tiap fitur AI ditampilkan supaya terlihat perannya di satu layar.
-            VStack(alignment: .leading, spacing: 6) {
-                Text("HASIL AI")
-                    .font(.pantangEyebrow)
-                    .foregroundStyle(Color.pantangMuted)
-                Text("\(hasil.jumlah[.bahan] ?? 0) bahan · \(hasil.jumlah[.peringatan] ?? 0) peringatan · \(hasil.jumlah[.lain] ?? 0) lain")
-                    .font(.pantangMeta)
-                    .foregroundStyle(Color.pantangInk)
-                BarisAI(nama: "Apple Foundation Models · Penjelasan", hasil: hasil.statusModel)
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .accessibilityElement(children: .combine)
-
             if let penjelasan = hasil.penjelasan {
-                VStack(alignment: .leading, spacing: 6) {
-                    Text("KENAPA")
-                        .font(.pantangEyebrow)
-                        .foregroundStyle(Color.pantangMuted)
+                KartuBagian(judul: "Kenapa") {
                     Text(penjelasan)
                         .font(.pantangBody)
+                        .lineSpacing(3)
                         .foregroundStyle(Color.pantangInk)
                 }
-                .frame(maxWidth: .infinity, alignment: .leading)
             }
 
-            VStack(alignment: .leading, spacing: 10) {
-                Text("BAHAN TERBACA")
-                    .font(.pantangEyebrow)
-                    .foregroundStyle(Color.pantangMuted)
-                if hasil.teks.isEmpty {
-                    Text("Tidak ada kalimat bahan yang terbaca.")
-                        .font(.system(size: 13, design: .monospaced))
-                        .foregroundStyle(Color.pantangInk)
-                } else {
-                    MarkedComposition(teks: hasil.teks, pilihan: pilihan)
-                }
-                if !hasil.teksPeringatan.isEmpty {
-                    Text("PERINGATAN DI LABEL")
-                        .font(.pantangEyebrow)
-                        .foregroundStyle(Color.pantangMuted)
-                        .padding(.top, 6)
-                    MarkedComposition(teks: hasil.teksPeringatan, pilihan: pilihan)
+            KartuBagian(judul: "Di label") {
+                VStack(alignment: .leading, spacing: 14) {
+                    VStack(alignment: .leading, spacing: 6) {
+                        SubJudul("Bahan")
+                        if hasil.teks.isEmpty {
+                            Text("Tidak ada kalimat bahan yang terbaca.")
+                                .font(.pantangCaption)
+                                .foregroundStyle(Color.pantangMuted)
+                        } else {
+                            MarkedComposition(teks: hasil.teks, pilihan: pilihan)
+                        }
+                    }
+                    if !hasil.teksPeringatan.isEmpty {
+                        Divider().overlay(Color.pantangLine)
+                        VStack(alignment: .leading, spacing: 6) {
+                            SubJudul("Dapat mengandung")
+                            MarkedComposition(teks: hasil.teksPeringatan, pilihan: pilihan)
+                        }
+                    }
                 }
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
 
+            // Bagian teknis paling bawah: peran tiap fitur AI.
+            let status = Self.pisahStatus(hasil.statusModel)
+            KartuBagian(judul: "Hasil AI", latar: Color.pantangFinder) {
+                VStack(alignment: .leading, spacing: 10) {
+                    BarisInfo(
+                        label: "Kalimat label",
+                        nilai: "\(hasil.jumlah[.bahan] ?? 0) bahan · \(hasil.jumlah[.peringatan] ?? 0) peringatan · \(hasil.jumlah[.lain] ?? 0) lain"
+                    )
+                    BarisInfo(label: "Penjelasan", nilai: "Apple Foundation Models", catatan: [status.0, status.1].compactMap { $0 }.joined(separator: ". "))
+                }
+            }
+            .accessibilityElement(children: .combine)
         }
+    }
+
+    /// "Bahasa Indonesia (Apple Intelligence …)" jadi ("Bahasa Indonesia", "Apple Intelligence …").
+    private static func pisahStatus(_ mentah: String) -> (String, String?) {
+        let teks = mentah.prefix(1).uppercased() + mentah.dropFirst()
+        guard let buka = teks.firstIndex(of: "("), teks.hasSuffix(")") else { return (teks, nil) }
+        let utama = teks[..<buka].trimmingCharacters(in: .whitespaces)
+        let catatan = teks[teks.index(after: buka)..<teks.index(before: teks.endIndex)]
+        return (utama, String(catatan) + ".")
     }
 
     private func bukaPengaturan() {
@@ -507,13 +525,14 @@ private struct BukanBahanGambar: View {
 
 private struct CapturedPhoto: View {
     let image: UIImage
+    var ringkas = false
 
     var body: some View {
         Image(uiImage: image)
             .resizable()
             .scaledToFit()
             .frame(maxWidth: .infinity)
-            .frame(height: 210)
+            .frame(height: ringkas ? 120 : 210)
             .background(Color.pantangFinder)
             .clipShape(RoundedRectangle(cornerRadius: 22))
             .overlay { CornerMarks() }
@@ -605,6 +624,66 @@ private struct DeniedBanner: View {
     }
 }
 
+/// Kartu putih dengan judul kecil, dipakai untuk semua bagian di bawah hasil.
+private struct KartuBagian<Isi: View>: View {
+    let judul: String
+    var latar: Color = .pantangKartu
+    @ViewBuilder var isi: Isi
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text(judul.uppercased())
+                .font(.pantangEyebrow)
+                .tracking(0.6)
+                .foregroundStyle(Color.pantangMuted)
+            isi
+        }
+        .padding(16)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(latar)
+        .overlay { RoundedRectangle(cornerRadius: 18).stroke(Color.pantangLine, lineWidth: 1) }
+        .clipShape(RoundedRectangle(cornerRadius: 18))
+    }
+}
+
+private struct SubJudul: View {
+    let teks: String
+    init(_ teks: String) { self.teks = teks }
+
+    var body: some View {
+        Text(teks)
+            .font(.system(size: 13, weight: .semibold))
+            .foregroundStyle(Color.pantangInk)
+    }
+}
+
+/// Label di kiri, nilai di kanan; catatan kecil di bawah kalau ada.
+private struct BarisInfo: View {
+    let label: String
+    let nilai: String
+    var catatan: String?
+
+    var body: some View {
+        HStack(alignment: .firstTextBaseline, spacing: 8) {
+            Text(label)
+                .font(.pantangCaption)
+                .foregroundStyle(Color.pantangMuted)
+                .frame(width: 92, alignment: .leading)
+            VStack(alignment: .leading, spacing: 2) {
+                Text(nilai)
+                    .font(.system(size: 13, weight: .medium))
+                    .foregroundStyle(Color.pantangInk)
+                if let catatan, !catatan.isEmpty {
+                    Text(catatan)
+                        .font(.system(size: 12))
+                        .foregroundStyle(Color.pantangMuted)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+            }
+        }
+    }
+}
+
 /// Satu baris di bagian HASIL AI: nama model di atas, hasilnya di bawah.
 private struct BarisAI: View {
     let nama: String
@@ -644,24 +723,34 @@ private struct MarkedLine: View {
     let line: String
     let pilihan: Set<Pantangan>
 
+    /// Satu Text dengan sorotan di dalamnya, supaya baris membungkus per kata
+    /// dan tanda koma tidak terlepas ke baris baru.
     var body: some View {
-        MarkWrap {
-            ForEach(potongan) { piece in
-                if piece.highlight {
-                    Text(piece.text)
-                        .font(.system(size: 13, weight: .semibold, design: .monospaced))
-                        .foregroundStyle(Color.pantangBahaya)
-                        .padding(.horizontal, 6)
-                        .padding(.vertical, 2)
-                        .background(Color.pantangBahayaLatar)
-                        .clipShape(Capsule())
-                } else {
-                    Text(piece.text)
-                        .font(.system(size: 13, weight: .regular, design: .monospaced))
-                        .foregroundStyle(Color.pantangInk)
-                }
+        Text(teksBersorot)
+            .font(.system(size: 13, weight: .regular, design: .monospaced))
+            .foregroundStyle(Color.pantangInk)
+            .lineSpacing(5)
+            .fixedSize(horizontal: false, vertical: true)
+    }
+
+    private var teksBersorot: AttributedString {
+        var hasil = AttributedString()
+        var index = line.startIndex
+        for range in IngredientMatch.rentangSorotan(di: line, dipilih: pilihan) where range.lowerBound >= index {
+            if index < range.lowerBound {
+                hasil += AttributedString(String(line[index..<range.lowerBound]))
             }
+            var sorot = AttributedString("\u{00A0}" + String(line[range]) + "\u{00A0}")
+            sorot.foregroundColor = Color.pantangBahaya
+            sorot.backgroundColor = Color.pantangBahayaLatar
+            sorot.font = .system(size: 13, weight: .semibold, design: .monospaced)
+            hasil += sorot
+            index = range.upperBound
         }
+        if index < line.endIndex {
+            hasil += AttributedString(String(line[index...]))
+        }
+        return hasil
     }
 
     private struct Piece: Identifiable {
@@ -814,6 +903,7 @@ private extension Color {
     static let pantangAmanLatar = Color(red: 0.89, green: 0.96, blue: 0.91)
     static let pantangBahaya = Color(red: 0.73, green: 0.16, blue: 0.16)
     static let pantangBahayaLatar = Color(red: 0.99, green: 0.90, blue: 0.90)
+    static let pantangKartu = Color(red: 1.0, green: 0.988, blue: 0.973)
     static let pantangPeringatanLatar = Color(red: 0.99, green: 0.94, blue: 0.80)
     static let pantangLine = Color(red: 0.894, green: 0.878, blue: 0.847)
     static let pantangChipLine = Color(red: 0.835, green: 0.827, blue: 0.808)

@@ -84,7 +84,7 @@ enum ScanService {
         teksBahan: String, teksPeringatan: String
     ) async -> (String?, String) {
         guard !(hits.isEmpty && mungkin.isEmpty) else {
-            return (nil, "tidak ada pantangan untuk dijelaskan")
+            return (nil, "Tidak dipakai (Tidak ada pantangan untuk dijelaskan)")
         }
         let model = SystemLanguageModel.default
         switch model.availability {
