@@ -39,6 +39,18 @@ enum Pantangan: String, CaseIterable, Identifiable, Codable {
         }
     }
 
+    /// Nama untuk prompt dan pengecek Foundation Models versi bahasa Inggris.
+    var namaInggris: String {
+        switch self {
+        case .susu: return "milk"
+        case .kacang: return "nut"
+        case .telur: return "egg"
+        case .gluten: return "gluten"
+        case .pemanis: return "sweetener"
+        case .garam: return "salt"
+        }
+    }
+
     /// Nama di label Indonesia, Inggris, dan nama kimia/INCI. Dicocokkan utuh, bukan potongan kata.
     var frasa: [String] {
         switch self {

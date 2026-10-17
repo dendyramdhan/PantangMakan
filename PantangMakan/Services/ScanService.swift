@@ -99,18 +99,26 @@ enum ScanService {
         if !model.supportsLocale() {
             return (nil, "Foundation Models tidak mendukung bahasa iPhone (\(Locale.current.identifier)). Ganti bahasa iPhone ke English")
         }
-        var fakta: [String] = []
         var jumlahKata = mungkin.count
+        var faktaID: [String] = []
+        var faktaEN: [String] = []
         for p in hits {
             let daftar = IngredientMatch.kataCocok(p, di: teksBahan)
             jumlahKata += max(1, daftar.count)
             let kata = daftar.joined(separator: ", ")
-            fakta.append("\(p.kataDiKalimat) ada di daftar bahan, tertulis: \(kata)")
+            faktaID.append("\(p.kataDiKalimat) ada di daftar bahan, tertulis: \(kata)")
+            faktaEN.append("\(p.namaInggris) is in the ingredient list, written on the label as: \(kata)")
         }
         for p in mungkin {
-            fakta.append("\(p.kataDiKalimat) hanya ada di kalimat dapat mengandung")
+            faktaID.append("\(p.kataDiKalimat) hanya ada di kalimat dapat mengandung")
+            faktaEN.append("\(p.namaInggris) only appears in a may-contain statement")
         }
-        let session = LanguageModelSession(instructions: """
+        let maks = min(3, jumlahKata)
+        let boleh = Set(hits + mungkin)
+
+        // Coba bahasa Indonesia dulu. Di iPhone fisik, Foundation Models menolak teks Indonesia
+        // ("unsupported language or locale"), jadi ulangi dalam bahasa Inggris.
+        let sessionID = LanguageModelSession(instructions: """
         Kamu menjelaskan label kemasan makanan dalam bahasa Indonesia, untuk orang yang punya pantangan makan.
         Tulis satu kalimat pendek untuk setiap fakta, paling banyak tiga kalimat.
         Jelaskan arti kata yang tertulis, misalnya nama Latin, nama Inggris, atau bahan turunan.
@@ -121,24 +129,47 @@ enum ScanService {
         Contoh fakta: telur hanya ada di kalimat dapat mengandung
         Contoh jawaban: Telur bukan bahan produk ini, tetapi pabriknya juga mengolah telur, jadi bisa ada sisa.
         """)
-        let reply: String
         do {
-            reply = try await session.respond(to: "Fakta:\n" + fakta.joined(separator: "\n")).content
+            let reply = try await sessionID.respond(to: "Fakta:\n" + faktaID.joined(separator: "\n")).content
+            guard let teks = diterima(reply, boleh: boleh, maksKalimat: maks, inggris: false) else {
+                print("PANTANG FM ditolak: \(reply)")
+                return (nil, "Penjelasan Foundation Models ditolak pengecek")
+            }
+            return (teks, "Penjelasan dari Foundation Models")
+        } catch LanguageModelSession.GenerationError.unsupportedLanguageOrLocale {
+            print("PANTANG FM: bahasa Indonesia ditolak, coba bahasa Inggris")
         } catch {
             print("PANTANG FM error: \(error)")
-            let bahasa = Locale.preferredLanguages.prefix(2).joined(separator: ", ")
-            return (nil, "Foundation Models gagal: \(error.localizedDescription) [locale \(Locale.current.identifier), bahasa \(bahasa)]")
+            return (nil, "Foundation Models gagal: \(error.localizedDescription)")
         }
-        guard let teks = diterima(reply, boleh: Set(hits + mungkin), maksKalimat: min(3, jumlahKata)) else {
-            print("PANTANG FM ditolak: \(reply)")
-            return (nil, "Penjelasan Foundation Models ditolak pengecek")
+
+        let sessionEN = LanguageModelSession(instructions: """
+        You explain food package labels for people who avoid certain foods.
+        Write one short sentence per fact, at most three sentences, in plain English.
+        Explain what the written word means, for example a Latin name, an Indonesian name, or a derived ingredient.
+        Do not use the word safe. Do not give medical advice. Do not mention ingredients that are not in the facts.
+
+        Example fact: milk is in the ingredient list, written on the label as: whey bubuk
+        Example answer: Whey bubuk is whey powder, which is made from milk.
+        Example fact: egg only appears in a may-contain statement
+        Example answer: Egg is not an ingredient, but the factory also handles egg, so traces are possible.
+        """)
+        do {
+            let reply = try await sessionEN.respond(to: "Facts:\n" + faktaEN.joined(separator: "\n")).content
+            guard let teks = diterima(reply, boleh: boleh, maksKalimat: maks, inggris: true) else {
+                print("PANTANG FM ditolak (EN): \(reply)")
+                return (nil, "Penjelasan Foundation Models ditolak pengecek")
+            }
+            return (teks, "Penjelasan dari Foundation Models (bahasa Inggris)")
+        } catch {
+            print("PANTANG FM error (EN): \(error)")
+            return (nil, "Foundation Models gagal: \(error.localizedDescription)")
         }
-        return (teks, "Penjelasan dari Foundation Models")
     }
 
     /// Penjelasan ditolak kalau memakai kata "aman", terlalu panjang, atau menyebut pantangan lain.
     /// Hanya kalimat sebanyak kata yang dijelaskan yang dipakai; sisanya biasanya mengulang.
-    private static func diterima(_ mentah: String, boleh: Set<Pantangan>, maksKalimat: Int) -> String? {
+    private static func diterima(_ mentah: String, boleh: Set<Pantangan>, maksKalimat: Int, inggris: Bool) -> String? {
         let rapi = mentah.replacingOccurrences(of: #"\s+"#, with: " ", options: .regularExpression)
         let potong = rapi.components(separatedBy: ". ")
             .map { $0.trimmingCharacters(in: CharacterSet(charactersIn: " .")) }
@@ -146,8 +177,9 @@ enum ScanService {
             .prefix(maksKalimat)
         let teks = potong.map { $0 + "." }.joined(separator: " ")
         let lower = teks.lowercased()
-        guard !teks.isEmpty, teks.count <= 320, !lower.contains("aman") else { return nil }
-        for p in Pantangan.allCases where !boleh.contains(p) && lower.contains(p.kataDiKalimat) {
+        let kataLarang = inggris ? "safe" : "aman"
+        guard !teks.isEmpty, teks.count <= 320, !lower.contains(kataLarang) else { return nil }
+        for p in Pantangan.allCases where !boleh.contains(p) && lower.contains(inggris ? p.namaInggris : p.kataDiKalimat) {
             return nil
         }
         return teks
