@@ -15,6 +15,8 @@ struct ScanOutput: Equatable {
     var peringatan: String?
     /// Penjelasan dari Foundation Models. Nil kalau Apple Intelligence tidak tersedia.
     var penjelasan: String?
+    /// Status Foundation Models untuk bagian HASIL AI, termasuk alasan kalau gagal.
+    var statusModel: String
     var jumlah: [JenisKalimat: Int]
     var adaBahan: Bool
     var ditolak: Bool
@@ -22,7 +24,7 @@ struct ScanOutput: Equatable {
     static let tolak = ScanOutput(
         teks: "", teksPeringatan: "",
         kalimat: "Ditolak. Gambar ini bukan daftar komposisi.",
-        peringatan: nil, penjelasan: nil, jumlah: [:], adaBahan: false, ditolak: true
+        peringatan: nil, penjelasan: nil, statusModel: "", jumlah: [:], adaBahan: false, ditolak: true
     )
 }
 
@@ -56,7 +58,7 @@ enum ScanService {
             : "Label juga menulis dapat mengandung \(IngredientMatch.gabungNama(mungkin.map(\.kataDiKalimat)))."
 
         // 3. Foundation Models menjelaskan kenapa kata yang terbaca termasuk pantangan.
-        let penjelasan = await jelaskan(
+        let (penjelasan, statusModel) = await jelaskan(
             hits: matched.hits, mungkin: mungkin,
             teksBahan: teksBahan, teksPeringatan: teksPeringatan
         )
@@ -67,6 +69,7 @@ enum ScanService {
             kalimat: matched.kalimat,
             peringatan: peringatan,
             penjelasan: penjelasan,
+            statusModel: statusModel,
             jumlah: jumlah,
             adaBahan: !matched.hits.isEmpty,
             ditolak: false
@@ -76,8 +79,26 @@ enum ScanService {
     private static func jelaskan(
         hits: [Pantangan], mungkin: [Pantangan],
         teksBahan: String, teksPeringatan: String
-    ) async -> String? {
-        guard !(hits.isEmpty && mungkin.isEmpty), SystemLanguageModel.default.isAvailable else { return nil }
+    ) async -> (String?, String) {
+        guard !(hits.isEmpty && mungkin.isEmpty) else {
+            return (nil, "Foundation Models: tidak ada pantangan untuk dijelaskan")
+        }
+        let model = SystemLanguageModel.default
+        switch model.availability {
+        case .available:
+            break
+        case .unavailable(.deviceNotEligible):
+            return (nil, "Foundation Models tidak tersedia: iPhone ini tidak mendukung Apple Intelligence")
+        case .unavailable(.appleIntelligenceNotEnabled):
+            return (nil, "Foundation Models tidak tersedia: Apple Intelligence belum dinyalakan")
+        case .unavailable(.modelNotReady):
+            return (nil, "Foundation Models tidak tersedia: model Apple Intelligence masih diunduh")
+        case .unavailable(let alasan):
+            return (nil, "Foundation Models tidak tersedia: \(alasan)")
+        }
+        if !model.supportsLocale() {
+            return (nil, "Foundation Models tidak mendukung bahasa iPhone (\(Locale.current.identifier)). Ganti bahasa iPhone ke English")
+        }
         var fakta: [String] = []
         var jumlahKata = mungkin.count
         for p in hits {
@@ -100,8 +121,18 @@ enum ScanService {
         Contoh fakta: telur hanya ada di kalimat dapat mengandung
         Contoh jawaban: Telur bukan bahan produk ini, tetapi pabriknya juga mengolah telur, jadi bisa ada sisa.
         """)
-        guard let reply = try? await session.respond(to: "Fakta:\n" + fakta.joined(separator: "\n")).content else { return nil }
-        return diterima(reply, boleh: Set(hits + mungkin), maksKalimat: min(3, jumlahKata))
+        let reply: String
+        do {
+            reply = try await session.respond(to: "Fakta:\n" + fakta.joined(separator: "\n")).content
+        } catch {
+            print("PANTANG FM error: \(error)")
+            return (nil, "Foundation Models gagal: \(error.localizedDescription)")
+        }
+        guard let teks = diterima(reply, boleh: Set(hits + mungkin), maksKalimat: min(3, jumlahKata)) else {
+            print("PANTANG FM ditolak: \(reply)")
+            return (nil, "Penjelasan Foundation Models ditolak pengecek")
+        }
+        return (teks, "Penjelasan dari Foundation Models")
     }
 
     /// Penjelasan ditolak kalau memakai kata "aman", terlalu panjang, atau menyebut pantangan lain.

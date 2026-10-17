@@ -267,11 +267,7 @@ struct ScanView: View {
                 Text("Create ML memilah \(hasil.jumlah[.bahan] ?? 0) kalimat bahan, \(hasil.jumlah[.peringatan] ?? 0) peringatan, \(hasil.jumlah[.lain] ?? 0) lain")
                     .font(.pantangMeta)
                     .foregroundStyle(Color.pantangInk)
-                Text(hasil.penjelasan != nil
-                     ? "Penjelasan dari Foundation Models"
-                     : (hasil.adaBahan || hasil.peringatan != nil)
-                     ? "Foundation Models tidak tersedia, Apple Intelligence mati"
-                     : "Foundation Models: tidak ada pantangan untuk dijelaskan")
+                Text(hasil.statusModel)
                     .font(.pantangMeta)
                     .foregroundStyle(Color.pantangInk)
             }
