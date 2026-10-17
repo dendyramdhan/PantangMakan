@@ -234,6 +234,16 @@ enum IngredientMatch {
         return hasil
     }
 
+    /// Kata di teks yang membuat pantangan ini cocok, misalnya "arachis hypogaea" untuk kacang.
+    static func kataCocok(_ pantangan: Pantangan, di teks: String) -> [String] {
+        var hasil: [String] = []
+        for r in rentangSorotan(di: teks, dipilih: [pantangan]) {
+            let kata = teks[r].lowercased()
+            if !hasil.contains(kata) { hasil.append(kata) }
+        }
+        return hasil
+    }
+
     static func kalimat(ocr: String, dipilih: Set<Pantangan>) -> (hits: [Pantangan], kalimat: String) {
         let tokens = tokenize(ocr)
         if tokens.isEmpty {
@@ -250,7 +260,7 @@ enum IngredientMatch {
         return (hits, "Ada \(daftar) di komposisi ini.")
     }
 
-    private static func gabungNama(_ nama: [String]) -> String {
+    static func gabungNama(_ nama: [String]) -> String {
         switch nama.count {
         case 0: return ""
         case 1: return nama[0]

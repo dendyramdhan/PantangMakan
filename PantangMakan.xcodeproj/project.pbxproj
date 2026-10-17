@@ -10,18 +10,20 @@
 		04662F7511D44C4A359D79C3 /* ContohSusu.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B5CA91C5079F453FFE0A1672 /* ContohSusu.jpg */; };
 		4ED0AC0A78D408EA08A75713 /* Pantangan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160C288BE3BBB7503D849281 /* Pantangan.swift */; };
 		77189FC9DC0C2A7775E04743 /* CameraPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = E70D8AB5A20956C2C6BC8D24 /* CameraPicker.swift */; };
+		9FDAB1CF6B64DB261E23F500 /* Pemilah.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80EB7C29CD274D7D2DD302C4 /* Pemilah.swift */; };
 		A41D7B8441E0E47E51AE3A7D /* PantangMakanApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C784D315E0115A7ED47A2F25 /* PantangMakanApp.swift */; };
 		B525EE71F7F4334B3E0EEAD2 /* ContohTeh.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 88AB2A195F860718BD385252 /* ContohTeh.jpg */; };
 		CD5DFF75CCB478327920E009 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7455224D3C8442EBB1E767B /* RootView.swift */; };
+		DE5A4C68096B27C291EE308D /* PemilahKalimat.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 2F960F5A97E435BB47CCE39B /* PemilahKalimat.mlmodel */; };
 		EFBF13C4F936FE5FABF6D570 /* ScanService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B72B69EC9157C8E5911987 /* ScanService.swift */; };
-		FB459EF0D44246A69EBF8229 /* PantanganText.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 0618C1351E0EA5C5EA7E5C02 /* PantanganText.mlmodel */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		0618C1351E0EA5C5EA7E5C02 /* PantanganText.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = PantanganText.mlmodel; sourceTree = "<group>"; };
 		160C288BE3BBB7503D849281 /* Pantangan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pantangan.swift; sourceTree = "<group>"; };
+		2F960F5A97E435BB47CCE39B /* PemilahKalimat.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = PemilahKalimat.mlmodel; sourceTree = "<group>"; };
 		48B72B69EC9157C8E5911987 /* ScanService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanService.swift; sourceTree = "<group>"; };
-		5186F8CCF480887450FA74AA /* PantangMakan.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PantangMakan.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		5186F8CCF480887450FA74AA /* PantangMakan.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = PantangMakan.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		80EB7C29CD274D7D2DD302C4 /* Pemilah.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pemilah.swift; sourceTree = "<group>"; };
 		88AB2A195F860718BD385252 /* ContohTeh.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = ContohTeh.jpg; sourceTree = "<group>"; };
 		B5CA91C5079F453FFE0A1672 /* ContohSusu.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = ContohSusu.jpg; sourceTree = "<group>"; };
 		C7455224D3C8442EBB1E767B /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
@@ -63,7 +65,7 @@
 			isa = PBXGroup;
 			children = (
 				160C288BE3BBB7503D849281 /* Pantangan.swift */,
-				0618C1351E0EA5C5EA7E5C02 /* PantanganText.mlmodel */,
+				2F960F5A97E435BB47CCE39B /* PemilahKalimat.mlmodel */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -88,6 +90,7 @@
 		B6B1E070887850B55914CBB2 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				80EB7C29CD274D7D2DD302C4 /* Pemilah.swift */,
 				48B72B69EC9157C8E5911987 /* ScanService.swift */,
 			);
 			path = Services;
@@ -124,6 +127,7 @@
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
 					DA8CED517DE3B3925BDA499E = {
+						DevelopmentTeam = R543KMB693;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -167,7 +171,8 @@
 				77189FC9DC0C2A7775E04743 /* CameraPicker.swift in Sources */,
 				A41D7B8441E0E47E51AE3A7D /* PantangMakanApp.swift in Sources */,
 				4ED0AC0A78D408EA08A75713 /* Pantangan.swift in Sources */,
-				FB459EF0D44246A69EBF8229 /* PantanganText.mlmodel in Sources */,
+				9FDAB1CF6B64DB261E23F500 /* Pemilah.swift in Sources */,
+				DE5A4C68096B27C291EE308D /* PemilahKalimat.mlmodel in Sources */,
 				CD5DFF75CCB478327920E009 /* RootView.swift in Sources */,
 				EFBF13C4F936FE5FABF6D570 /* ScanService.swift in Sources */,
 			);
@@ -303,7 +308,7 @@
 				CODE_SIGNING_REQUIRED = NO;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = MD9FTFBKQK;
+				DEVELOPMENT_TEAM = R543KMB693;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = PantangMakan;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Kamera dipakai untuk memfoto daftar komposisi pada kemasan.";
@@ -331,7 +336,7 @@
 				CODE_SIGNING_REQUIRED = NO;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = MD9FTFBKQK;
+				DEVELOPMENT_TEAM = R543KMB693;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = PantangMakan;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Kamera dipakai untuk memfoto daftar komposisi pada kemasan.";

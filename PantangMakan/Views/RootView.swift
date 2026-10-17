@@ -27,6 +27,11 @@ struct RootView: View {
                 selesaiOnboarding = true
                 return
             }
+            if args.contains("--peringatan") {
+                pilihan = [.kacang]
+                selesaiOnboarding = true
+                return
+            }
             if args.contains("--pratinjau") || args.contains("--ditolak") {
                 pilihan = [.kacang, .pemanis]
                 selesaiOnboarding = true
@@ -232,52 +237,80 @@ struct ScanView: View {
             .clipShape(RoundedRectangle(cornerRadius: 22))
         } else {
             let bahaya = hasil.adaBahan
-            Text(hasil.kalimat)
-                .font(.pantangTitle)
-                            .lineSpacing(6)
-                .foregroundStyle(bahaya ? Color.pantangBahaya : Color.pantangAman)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(16)
-                .background(bahaya ? Color.pantangBahayaLatar : Color.pantangAmanLatar)
-                .clipShape(RoundedRectangle(cornerRadius: 22))
-        }
-
-        if hasil.koneksiGagal {
-            Button("Coba lagi") { Task { await ulang() } }
-                .font(.pantangMeta)
-                .foregroundStyle(Color.pantangAccent)
-                .buttonStyle(.plain)
-        }
-
-        if !hasil.ditolak {
-            VStack(alignment: .leading, spacing: 10) {
-                Text("KOMPOSISI TERBACA")
-                    .font(.pantangEyebrow)
-                    .foregroundStyle(Color.pantangMuted)
-                if hasil.teks.isEmpty {
-                    Text("Tidak ada huruf yang terbaca.")
-                        .font(.system(size: 13, design: .monospaced))
+            VStack(alignment: .leading, spacing: 12) {
+                Text(hasil.kalimat)
+                    .font(.pantangTitle)
+                    .lineSpacing(6)
+                    .foregroundStyle(bahaya ? Color.pantangBahaya : Color.pantangAman)
+                if let peringatan = hasil.peringatan {
+                    Label(peringatan, systemImage: "exclamationmark.triangle")
+                        .font(.pantangBody)
                         .foregroundStyle(Color.pantangInk)
-                } else {
-                    MarkedComposition(teks: hasil.teks, pilihan: pilihan)
+                        .padding(10)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .background(Color.pantangPeringatanLatar)
+                        .clipShape(RoundedRectangle(cornerRadius: 12))
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(16)
+            .background(bahaya ? Color.pantangBahayaLatar : Color.pantangAmanLatar)
+            .clipShape(RoundedRectangle(cornerRadius: 22))
+        }
 
-            // Hasil tiap fitur AI ditampilkan supaya juri bisa melihat semuanya di satu layar.
+        if !hasil.ditolak {
+            // Hasil tiap fitur AI ditampilkan supaya terlihat perannya di satu layar.
             VStack(alignment: .leading, spacing: 6) {
                 Text("HASIL AI")
                     .font(.pantangEyebrow)
                     .foregroundStyle(Color.pantangMuted)
-                Text("Create ML: \(hasil.modelTeks)")
+                Text("Create ML memilah \(hasil.jumlah[.bahan] ?? 0) kalimat bahan, \(hasil.jumlah[.peringatan] ?? 0) peringatan, \(hasil.jumlah[.lain] ?? 0) lain")
                     .font(.pantangMeta)
                     .foregroundStyle(Color.pantangInk)
-                Text("Kalimat dari: \(hasil.sumber)")
+                Text(hasil.penjelasan != nil
+                     ? "Penjelasan dari Foundation Models"
+                     : (hasil.adaBahan || hasil.peringatan != nil)
+                     ? "Foundation Models tidak tersedia, Apple Intelligence mati"
+                     : "Foundation Models: tidak ada pantangan untuk dijelaskan")
                     .font(.pantangMeta)
                     .foregroundStyle(Color.pantangInk)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .accessibilityElement(children: .combine)
+
+            if let penjelasan = hasil.penjelasan {
+                VStack(alignment: .leading, spacing: 6) {
+                    Text("KENAPA")
+                        .font(.pantangEyebrow)
+                        .foregroundStyle(Color.pantangMuted)
+                    Text(penjelasan)
+                        .font(.pantangBody)
+                        .foregroundStyle(Color.pantangInk)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+            }
+
+            VStack(alignment: .leading, spacing: 10) {
+                Text("BAHAN TERBACA")
+                    .font(.pantangEyebrow)
+                    .foregroundStyle(Color.pantangMuted)
+                if hasil.teks.isEmpty {
+                    Text("Tidak ada kalimat bahan yang terbaca.")
+                        .font(.system(size: 13, design: .monospaced))
+                        .foregroundStyle(Color.pantangInk)
+                } else {
+                    MarkedComposition(teks: hasil.teks, pilihan: pilihan)
+                }
+                if !hasil.teksPeringatan.isEmpty {
+                    Text("PERINGATAN DI LABEL")
+                        .font(.pantangEyebrow)
+                        .foregroundStyle(Color.pantangMuted)
+                        .padding(.top, 6)
+                    MarkedComposition(teks: hasil.teksPeringatan, pilihan: pilihan)
+                }
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+
         }
     }
 
@@ -304,17 +337,15 @@ struct ScanView: View {
         }
     }
 
-    private func ulang() async {
-        guard let gambarTerakhir else { return }
-        await proses(gambarTerakhir)
-    }
-
     private func pratinjauJikaDiminta() {
         let args = ProcessInfo.processInfo.arguments
         let ditolak = args.contains("--ditolak")
         let aman = args.contains("--aman")
-        guard ditolak || aman || args.contains("--pratinjau") else { return }
-        let baris = ditolak
+        let peringatan = args.contains("--peringatan")
+        guard ditolak || aman || peringatan || args.contains("--pratinjau") else { return }
+        let baris = peringatan
+            ? ["WAFER COKELAT", "KOMPOSISI", "tepung terigu, gula,", "susu bubuk, garam.", "Dapat mengandung", "telur dan kacang.", "INFORMASI NILAI GIZI"]
+            : ditolak
             ? ["KRIUK", "Keripik Kentang", "Rasa Original", "Berat bersih 68 g"]
             : aman
             ? ["TEH MELATI", "KOMPOSISI", "air, daun teh,", "bunga melati", "INFORMASI NILAI GIZI", "Takaran saji 30 g"]
@@ -343,7 +374,7 @@ struct ScanView: View {
         let output = await ScanService.scan(image: image, dipilih: pilihan)
         hasil = output
         sedang = false
-        print("PANTANG \(output.sumber) | \(output.modelTeks) | \(output.kalimat)")
+        print("PANTANG \(output.jumlah) | \(output.kalimat) | \(output.peringatan ?? "-") | \(output.penjelasan ?? "-")")
         ucapkan(output.kalimat)
     }
 
@@ -771,6 +802,7 @@ private extension Color {
     static let pantangAmanLatar = Color(red: 0.89, green: 0.96, blue: 0.91)
     static let pantangBahaya = Color(red: 0.73, green: 0.16, blue: 0.16)
     static let pantangBahayaLatar = Color(red: 0.99, green: 0.90, blue: 0.90)
+    static let pantangPeringatanLatar = Color(red: 0.99, green: 0.94, blue: 0.80)
     static let pantangLine = Color(red: 0.894, green: 0.878, blue: 0.847)
     static let pantangChipLine = Color(red: 0.835, green: 0.827, blue: 0.808)
     static let pantangButtonOff = Color(red: 0.612, green: 0.608, blue: 0.588)

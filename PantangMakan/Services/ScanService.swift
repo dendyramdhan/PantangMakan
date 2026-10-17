@@ -6,164 +6,119 @@ import UIKit
 import Vision
 
 struct ScanOutput: Equatable {
+    /// Kalimat yang dipilah Create ML sebagai bahan. Ini yang dicocokkan dengan pantangan.
     var teks: String
-    var modelTeks: String
+    /// Kalimat "dapat mengandung" dan sejenisnya, ditampilkan terpisah.
+    var teksPeringatan: String
     var kalimat: String
-    var sumber: String
-    var kalimatAPI: String
-    var koneksiGagal: Bool
+    /// Pantangan yang hanya disebut di kalimat peringatan, misalnya "Dapat mengandung kacang".
+    var peringatan: String?
+    /// Penjelasan dari Foundation Models. Nil kalau Apple Intelligence tidak tersedia.
+    var penjelasan: String?
+    var jumlah: [JenisKalimat: Int]
     var adaBahan: Bool
     var ditolak: Bool
+
+    static let tolak = ScanOutput(
+        teks: "", teksPeringatan: "",
+        kalimat: "Ditolak. Gambar ini bukan daftar komposisi.",
+        peringatan: nil, penjelasan: nil, jumlah: [:], adaBahan: false, ditolak: true
+    )
 }
 
 enum ScanService {
+    /// Model Create ML hasil latihan di `dataset/latih.swift`.
+    private static let pemilah: NLModel? = {
+        guard let ml = try? PemilahKalimat(configuration: MLModelConfiguration()).model else { return nil }
+        return try? NLModel(mlModel: ml)
+    }()
+
     static func scan(image: UIImage, dipilih: Set<Pantangan>) async -> ScanOutput {
         let ocr = recognizeText(in: image)
-        guard !ocr.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
-            return ScanOutput(
-                teks: "",
-                modelTeks: "Tidak dikenali",
-                kalimat: "Ditolak. Gambar ini bukan daftar komposisi.",
-                sumber: "Kata yang cocok",
-                kalimatAPI: "",
-                koneksiGagal: false,
-                adaBahan: false,
-                ditolak: true
-            )
-        }
-        guard let komposisi = IngredientMatch.bagianKomposisi(ocr) else {
-            return ScanOutput(
-                teks: "",
-                modelTeks: "Tidak dikenali",
-                kalimat: "Ditolak. Gambar ini bukan daftar komposisi.",
-                sumber: "Kata yang cocok",
-                kalimatAPI: "",
-                koneksiGagal: false,
-                adaBahan: false,
-                ditolak: true
-            )
-        }
-        let matched = IngredientMatch.kalimat(ocr: komposisi, dipilih: dipilih)
-        let modelTeks = klasifikasi(komposisi)
-
-        if SystemLanguageModel.default.isAvailable {
-            if let dariModel = await phraseWithFoundationModel(fakta: matched.kalimat, hits: matched.hits) {
-                return ScanOutput(
-                    teks: komposisi,
-                    modelTeks: modelTeks,
-                    kalimat: dariModel,
-                    sumber: "Foundation Models",
-                    kalimatAPI: "",
-                    koneksiGagal: false,
-                    adaBahan: !matched.hits.isEmpty,
-                    ditolak: false
-                )
-            }
-            return aturan(komposisi, modelTeks: modelTeks, matched: matched)
+        guard !ocr.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
+              let komposisi = IngredientMatch.bagianKomposisi(ocr) else {
+            return .tolak
         }
 
-        if let dariAPI = await phraseWithDicoding(fakta: matched.kalimat, hits: matched.hits) {
-            return ScanOutput(
-                teks: komposisi,
-                modelTeks: modelTeks,
-                kalimat: dariAPI,
-                sumber: "API Dicoding",
-                kalimatAPI: dariAPI,
-                koneksiGagal: false,
-                adaBahan: !matched.hits.isEmpty,
-                ditolak: false
-            )
-        }
+        // 1. Create ML memilah tiap kalimat: bahan, peringatan, atau lain.
+        let kalimat = Pemilah.pilah(komposisi, model: pemilah)
+        let teksBahan = kalimat.filter { $0.jenis == .bahan }.map(\.teks).joined(separator: "\n")
+        let teksPeringatan = kalimat.filter { $0.jenis == .peringatan }.map(\.teks).joined(separator: "\n")
+        var jumlah: [JenisKalimat: Int] = [:]
+        for k in kalimat { jumlah[k.jenis, default: 0] += 1 }
 
-        return aturan(komposisi, modelTeks: modelTeks, matched: matched, koneksiGagal: true)
-    }
+        // 2. Daftar kata mencocokkan pantangan hanya di kalimat bahan.
+        let matched = IngredientMatch.kalimat(ocr: teksBahan, dipilih: dipilih)
+        let mungkin = IngredientMatch.kalimat(ocr: teksPeringatan, dipilih: dipilih).hits
+            .filter { !matched.hits.contains($0) }
+        let peringatan = mungkin.isEmpty
+            ? nil
+            : "Label juga menulis dapat mengandung \(IngredientMatch.gabungNama(mungkin.map(\.kataDiKalimat)))."
 
-    private static func aturan(
-        _ komposisi: String,
-        modelTeks: String,
-        matched: (hits: [Pantangan], kalimat: String),
-        koneksiGagal: Bool = false
-    ) -> ScanOutput {
-        ScanOutput(
-            teks: komposisi,
-            modelTeks: modelTeks,
+        // 3. Foundation Models menjelaskan kenapa kata yang terbaca termasuk pantangan.
+        let penjelasan = await jelaskan(
+            hits: matched.hits, mungkin: mungkin,
+            teksBahan: teksBahan, teksPeringatan: teksPeringatan
+        )
+
+        return ScanOutput(
+            teks: teksBahan,
+            teksPeringatan: teksPeringatan,
             kalimat: matched.kalimat,
-            sumber: "Kata yang cocok",
-            kalimatAPI: "",
-            koneksiGagal: koneksiGagal,
+            peringatan: peringatan,
+            penjelasan: penjelasan,
+            jumlah: jumlah,
             adaBahan: !matched.hits.isEmpty,
             ditolak: false
         )
     }
 
-    private static func klasifikasi(_ teks: String) -> String {
-        let bersih = teks.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !bersih.isEmpty else { return "Tidak dikenali" }
-        guard let ml = try? PantanganText(configuration: MLModelConfiguration()).model,
-              let nl = try? NLModel(mlModel: ml) else {
-            return "Model tidak termuat"
+    private static func jelaskan(
+        hits: [Pantangan], mungkin: [Pantangan],
+        teksBahan: String, teksPeringatan: String
+    ) async -> String? {
+        guard !(hits.isEmpty && mungkin.isEmpty), SystemLanguageModel.default.isAvailable else { return nil }
+        var fakta: [String] = []
+        var jumlahKata = mungkin.count
+        for p in hits {
+            let daftar = IngredientMatch.kataCocok(p, di: teksBahan)
+            jumlahKata += max(1, daftar.count)
+            let kata = daftar.joined(separator: ", ")
+            fakta.append("\(p.kataDiKalimat) ada di daftar bahan, tertulis: \(kata)")
         }
-        let hyps = nl.predictedLabelHypotheses(for: bersih.lowercased(), maximumCount: 1)
-        guard let top = hyps.max(by: { $0.value < $1.value }) else { return "Tidak dikenali" }
-        let label = top.key == "tidak" ? "tanpa pantangan" : top.key
-        return "\(label) \(Int(top.value * 100))%"
-    }
-
-    private static func phraseWithFoundationModel(fakta: String, hits: [Pantangan]) async -> String? {
-        guard SystemLanguageModel.default.isAvailable else { return nil }
+        for p in mungkin {
+            fakta.append("\(p.kataDiKalimat) hanya ada di kalimat dapat mengandung")
+        }
         let session = LanguageModelSession(instructions: """
-        Kamu menulis tepat satu kalimat bahasa Indonesia.
-        Salin faktanya. Jangan mengubah susunan kata.
-        Jangan menambah bahan atau angka.
+        Kamu menjelaskan label kemasan makanan dalam bahasa Indonesia, untuk orang yang punya pantangan makan.
+        Tulis satu kalimat pendek untuk setiap fakta, paling banyak tiga kalimat.
+        Jelaskan arti kata yang tertulis, misalnya nama Latin, nama Inggris, atau bahan turunan.
+        Jangan memakai kata aman. Jangan memberi saran medis. Jangan menyebut bahan yang tidak ada di fakta.
+
+        Contoh fakta: susu ada di daftar bahan, tertulis: whey bubuk
+        Contoh jawaban: Whey bubuk dibuat dari susu.
+        Contoh fakta: telur hanya ada di kalimat dapat mengandung
+        Contoh jawaban: Telur bukan bahan produk ini, tetapi pabriknya juga mengolah telur, jadi bisa ada sisa.
         """)
-        let prompt = "Tulis ulang fakta ini persis. Fakta: \(fakta)"
-        guard let reply = try? await session.respond(to: prompt).content else { return nil }
-        return diterima(reply, hits: hits)
+        guard let reply = try? await session.respond(to: "Fakta:\n" + fakta.joined(separator: "\n")).content else { return nil }
+        return diterima(reply, boleh: Set(hits + mungkin), maksKalimat: min(3, jumlahKata))
     }
 
-    private static func phraseWithDicoding(fakta: String, hits: [Pantangan]) async -> String? {
-        guard let url = URL(string: "https://oss.dicoding-ai.dev/v1/chat/completions") else { return nil }
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.timeoutInterval = 40
-        let payload: [String: Any] = [
-            "model": "openai/gpt-oss-20b",
-            "messages": [
-                ["role": "user", "content": "Balas dengan satu kalimat bahasa Indonesia saja. Jangan menambah benda baru. Salin faktanya. Fakta: \(fakta)"]
-            ],
-            "max_tokens": 2000,
-            "temperature": 0.2
-        ]
-        guard let body = try? JSONSerialization.data(withJSONObject: payload) else { return nil }
-        request.httpBody = body
-        guard let (data, response) = try? await URLSession.shared.data(for: request),
-              let http = response as? HTTPURLResponse, http.statusCode == 200,
-              let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
-              let choices = json["choices"] as? [[String: Any]],
-              let message = choices.first?["message"] as? [String: Any],
-              let content = message["content"] as? String else {
+    /// Penjelasan ditolak kalau memakai kata "aman", terlalu panjang, atau menyebut pantangan lain.
+    /// Hanya kalimat sebanyak kata yang dijelaskan yang dipakai; sisanya biasanya mengulang.
+    private static func diterima(_ mentah: String, boleh: Set<Pantangan>, maksKalimat: Int) -> String? {
+        let rapi = mentah.replacingOccurrences(of: #"\s+"#, with: " ", options: .regularExpression)
+        let potong = rapi.components(separatedBy: ". ")
+            .map { $0.trimmingCharacters(in: CharacterSet(charactersIn: " .")) }
+            .filter { !$0.isEmpty }
+            .prefix(maksKalimat)
+        let teks = potong.map { $0 + "." }.joined(separator: " ")
+        let lower = teks.lowercased()
+        guard !teks.isEmpty, teks.count <= 320, !lower.contains("aman") else { return nil }
+        for p in Pantangan.allCases where !boleh.contains(p) && lower.contains(p.kataDiKalimat) {
             return nil
         }
-        return diterima(content, hits: hits)
-    }
-
-    private static func diterima(_ mentah: String, hits: [Pantangan]) -> String? {
-        let kalimat = mentah
-            .trimmingCharacters(in: .whitespacesAndNewlines)
-            .replacingOccurrences(of: "\n", with: " ")
-        guard !kalimat.isEmpty else { return nil }
-        let lower = kalimat.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
-        if hits.isEmpty {
-            // Kata "aman" tidak boleh dipakai: app hanya melaporkan isi komposisi, bukan menjamin keamanan.
-            guard lower.hasPrefix("tidak ditemukan"), lower.contains("komposisi"), !lower.contains("aman") else { return nil }
-            return kalimat
-        }
-        guard lower.hasPrefix("ada "), lower.contains("komposisi"), !lower.contains("tidak ditemukan"), !lower.contains("aman") else { return nil }
-        for hit in hits where !lower.contains(hit.kataDiKalimat) {
-            return nil
-        }
-        return kalimat
+        return teks
     }
 
     private static func recognizeText(in image: UIImage) -> String {
