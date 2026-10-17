@@ -1,6 +1,6 @@
 # PantangMakan
 
-Nama masih bisa diganti. Grup 5. Satu pengguna: orang yang sudah tahu alerginya, huruf komposisi di bungkus terlalu kecil.
+Grup 5. Satu pengguna: orang yang sudah tahu alerginya, huruf komposisi di bungkus terlalu kecil.
 
 ## Selesai kalau
 
@@ -18,9 +18,9 @@ Nama masih bisa diganti. Grup 5. Satu pengguna: orang yang sudah tahu alerginya,
 ## Urutan demo, 7 menit
 
 1. Cerita satu orang dulu, sebelum membuka fitur.
-2. Pilih alergi susu. Foto komposisi yang ada susu, atau tombol Contoh ada susu.
-3. Tanpa menutup aplikasi, foto kedua atau Contoh tanpa susu. Kalimat berganti.
-4. Tolak izin kamera. Tunjukkan pesan dan tombol Pengaturan.
+2. Pilih kacang dan pemanis. Foto komposisi yang memuat kacang dan gula.
+3. Tanpa menutup aplikasi, tekan Ubah, pilih garam, foto komposisi teh. Kalimat berganti.
+4. Foto depan kemasan: Ditolak. Cadangan: tolak izin kamera, tunjukkan pesan dan tombol Buka Pengaturan.
 
 ## Tidak dibuat
 

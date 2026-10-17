@@ -134,7 +134,7 @@ divider("01", "Tim Kami", "Bagian ini tidak dinilai. Sebut nama saja. Pekerjaan 
   s.addNotes("Jangan isi pekerjaan atau peran kalau belum disepakati.");
 }
 
-divider("02", "Masalah yang Kami Selesaikan", "Mulai dari cerita satu orang sungguhan sebelum fitur. Sebut nama dan pantangannya, jangan dikarang.");
+divider("02", "Masalah yang Kami Selesaikan", "Mulai dari cerita satu pengguna sungguhan sebelum fitur. Sebut nama dan pantangannya, jangan dikarang.");
 
 {
   const s = pres.addSlide();
@@ -142,7 +142,7 @@ divider("02", "Masalah yang Kami Selesaikan", "Mulai dari cerita satu orang sung
   contentTitle(s, "Masalah yang Kami Selesaikan");
   // Lima isi yang diminta template: pengguna, masalah, asal masalah, cara app menyelesaikan, dampak lain.
   const cards = [
-    { k: "Pengguna", t: "Orang yang punya pantangan makan, karena alergi atau pilihan sendiri." },
+    { k: "Pengguna", t: "Pengguna yang punya pantangan makan, karena alergi atau pilihan sendiri." },
     { k: "Masalah", t: "Huruf daftar komposisi di kemasan terlalu kecil, jadi bahan pantangan terlewat." },
     { k: "Asal masalah", t: "Dari pengguna yang punya pantangan: tiap belanja, ia membalik bungkus dan membaca huruf kecil satu per satu." },
     { k: "Cara app menyelesaikannya", t: "Pilih pantangan sekali, foto komposisinya, lalu baca satu kalimat: ada pantanganmu atau tidak." },
@@ -170,7 +170,7 @@ divider("02", "Masalah yang Kami Selesaikan", "Mulai dari cerita satu orang sung
     });
   });
   footer(s, "Grup 5  ·  PantangMakan  ·  Jalur Tim");
-  s.addNotes("Buka dengan cerita satu orang sebelum fitur (syarat D4 Skilled). Sebut nama dan pantangan orang sungguhan yang kalian kenal, jangan dikarang. Contoh alur: dia di minimarket, membalik bungkus selai, huruf komposisinya kecil. Lalu: pilih pantangan sekali, foto, baca satu kalimat. Dampak lain: arachis hypogaea dikenali sebagai kacang.");
+  s.addNotes("Buka dengan cerita satu pengguna sebelum fitur (syarat D4 Skilled). Sebut nama dan pantangan pengguna sungguhan yang kalian kenal, jangan dikarang. Lalu: pilih pantangan sekali, foto, baca satu kalimat. Dampak lain: arachis hypogaea dikenali sebagai kacang.");
 }
 
 divider("03", "Solusi Berbasis AI", "Sebut kelompoknya: dua diajarkan (Create ML, Foundation Models) dan dua side-app (baca teks dari foto, API). Jangan bilang semuanya on-device. Di layar hasil, tunjuk bagian HASIL AI.");
@@ -245,7 +245,7 @@ divider("04", "Demo Produk", "Saat bagian ini, pindah ke iPhone. Urutan: happy p
       fontFace: FONT, fontSize: 12, color: C.muted, align: "center", margin: 0,
     });
   });
-  s.addNotes("Di iPhone: pilih kacang dan pemanis, foto komposisi yang memuat kacang dan gula. Lalu Foto ulang pada teh, pantangan garam: kartu hijau. Terakhir foto depan kemasan: Ditolak. Izin kamera ditolak juga bisa ditunjukkan: pita kiri dan Buka Pengaturan.");
+  s.addNotes("Di iPhone: pilih kacang dan pemanis, foto komposisi yang memuat kacang dan gula. Lalu tekan Ubah, pilih garam, dan foto komposisi teh: kartu hijau. Terakhir foto depan kemasan: Ditolak. Izin kamera ditolak juga bisa ditunjukkan: pita kiri dan Buka Pengaturan.");
 }
 
 divider("05", "Validasi Produk", "Jangan mengarang angka. Evaluasi 10 foto belum dijalankan. Lesson learned: model bahasa kadang menambah kata sendiri, jadi kalimatnya dicek dulu.");
