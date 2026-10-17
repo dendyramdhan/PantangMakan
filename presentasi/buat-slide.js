@@ -114,7 +114,7 @@ divider("02", "Masalah yang Kami Selesaikan", "Huruf komposisi terlalu kecil, da
 }
 
 // --- 3 Solusi AI ---
-divider("03", "Solusi Berbasis AI", "Tiga fitur AI berurutan dalam satu foto.", cropRight("crop-hasil-ai.png", 1361 / 1260, "Bagian hasil AI di layar app"),
+divider("03", "Solusi Berbasis AI", "Tiga fitur AI berurutan dalam satu foto.", cropRight("crop-hasil-ai.png", 1355 / 1260, "Bagian hasil AI di layar app"),
   "Dua fitur diajarkan (Create ML, Foundation Models) dan satu dari side-app (baca teks dari foto). Semuanya jalan di perangkat.");
 {
   const s = pres.addSlide();
@@ -135,7 +135,7 @@ divider("03", "Solusi Berbasis AI", "Tiga fitur AI berurutan dalam satu foto.", 
     if (i < 2) s.addText("→", { x: x + 2.78, y: 3.0, w: 0.25, h: 0.4, fontFace: FONT, fontSize: 18, color: C.brick, margin: 0, align: "center" });
   });
   s.addText("Pantangan dicocokkan dengan daftar kata hanya di kalimat bahan. Kalimat peringatan jadi kotak kuning terpisah.", { x: 0.55, y: 5.65, w: 8.8, h: 0.6, fontFace: FONT, fontSize: 14, color: C.muted, margin: 0, valign: "top" });
-  s.addImage({ path: DEMO + "crop-hasil-ai.png", x: 9.6, y: 1.25, w: 3.2, h: 3.2 * 1361 / 1260, altText: "Hasil AI dan penjelasan di layar app" });
+  s.addImage({ path: DEMO + "crop-hasil-ai.png", x: 9.6, y: 1.25, w: 3.2, h: 3.2 * 1355 / 1260, altText: "Hasil AI dan penjelasan di layar app" });
   s.addText("Layar hasil: bagian HASIL AI dan KENAPA", { x: 9.6, y: 4.75, w: 3.2, h: 0.3, fontFace: FONT, fontSize: 11, color: C.muted, margin: 0 });
   footer(s);
   s.addNotes("Urutan: foto, Vision membaca teks, Create ML memilah kalimat, daftar kata mencocokkan pantangan di kalimat bahan, Foundation Models menjelaskan. Tunjuk bagian HASIL AI saat demo.");
