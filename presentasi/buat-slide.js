@@ -136,7 +136,7 @@ divider("03", "Solusi Berbasis AI", "Tiga fitur AI berurutan dalam satu foto.", 
   });
   s.addText("Pantangan dicocokkan dengan daftar kata hanya di kalimat bahan. Kalimat peringatan jadi kotak kuning terpisah.", { x: 0.55, y: 5.65, w: 8.8, h: 0.6, fontFace: FONT, fontSize: 14, color: C.muted, margin: 0, valign: "top" });
   s.addImage({ path: DEMO + "crop-hasil-ai.png", x: 9.6, y: 1.25, w: 3.2, h: 3.2 * 1010 / 1260, altText: "Hasil AI dan penjelasan di layar app" });
-  s.addText("Layar hasil: bagian HASIL AI dan KENAPA", { x: 9.6, y: 3.65, w: 3.2, h: 0.3, fontFace: FONT, fontSize: 11, color: C.muted, margin: 0 });
+  s.addText("Layar hasil: bagian HASIL AI dan KENAPA", { x: 9.6, y: 3.92, w: 3.2, h: 0.3, fontFace: FONT, fontSize: 11, color: C.muted, margin: 0 });
   footer(s);
   s.addNotes("Urutan: foto, Vision membaca teks, Create ML memilah kalimat, daftar kata mencocokkan pantangan di kalimat bahan, Foundation Models menjelaskan. Tunjuk bagian HASIL AI saat demo.");
 }
