@@ -12,7 +12,7 @@ ScanBite membaca foto daftar komposisi di kemasan, lalu memberi tahu apakah pant
 |---|---|---|---|
 | Vision | Apple | Membaca huruf dari foto | Side-app (baca teks dari foto) |
 | Model kustom `PemilahKalimat` (Create ML) | Kami latih sendiri | Memilah tiap kalimat label: bahan, peringatan, atau lain | Diajarkan, sesi 1.3 |
-| Foundation Models | Apple Intelligence | Menjelaskan arti bahan yang ditemukan | Diajarkan, sesi 2.6 |
+| Foundation Models | Apple Intelligence | Menjelaskan efek bahan pantangan yang ditemukan | Diajarkan, sesi 2.6 |
 
 Merah atau hijau diputuskan oleh **daftar kata** (aturan, bukan AI), supaya app tidak pernah mengarang bahan. AI dipakai untuk membaca, memilah, dan menjelaskan.
 
@@ -26,7 +26,7 @@ Pilih pantangan → Foto label
   ④ Create ML          tiap kalimat → bahan / peringatan / lain
   ⑤ Daftar kata        cari pantangan di kalimat bahan dan peringatan
   ⑥ Kartu hasil        merah / hijau / + kotak kuning
-  ⑦ Foundation Models  penjelasan di bagian "Kenapa"
+  ⑦ Foundation Models  efek bahan di bagian "Kenapa"
 ```
 
 ### Langkah 0 · Pilih pantangan
@@ -36,6 +36,7 @@ Pilih pantangan → Foto label
 
 ### Langkah 1 · Foto
 - Tombol **Pakai kamera**. Kalau izin kamera ditolak: pesan dan tombol **Buka Pengaturan**.
+- Tombol **Pilih dari galeri** (PhotosPicker, tanpa izin galeri). Di layar hasil ada tombol **Galeri** di samping **Foto ulang**.
 
 ### ① Vision membaca teks (`ScanService.swift`)
 - `VNRecognizeTextRequest`, `recognitionLevel = .accurate`, bahasa `id-ID` dan `en-US`, koreksi bahasa menyala.
@@ -84,21 +85,22 @@ Pilih pantangan → Foto label
 
 Kata "aman" sengaja tidak dipakai. App melaporkan isi label, bukan menjamin keamanan.
 
-### ⑦ Foundation Models menjelaskan
+### ⑦ Foundation Models menjelaskan efek
 - `SystemLanguageModel.default` dan `LanguageModelSession`, model bawaan Apple Intelligence di iPhone.
-- Hanya jalan kalau ada pantangan yang ditemukan. Masukannya fakta pasti, misalnya "kacang ada di daftar bahan, tertulis: kacang tanah, arachis hypogaea".
-- Instruksi: satu kalimat per fakta, paling banyak tiga, jelaskan nama Latin, nama Inggris, atau bahan turunan. Dilarang memakai kata "aman", memberi saran medis, atau menyebut bahan lain.
-- Jawaban dicek dulu: ditolak kalau memuat kata utuh "aman" atau "safe", menyebut pantangan lain, atau lebih dari 320 huruf. Tanda markdown dibersihkan.
+- Hanya jalan kalau ada pantangan yang ditemukan. Masukannya fakta pasti plus efeknya, misalnya "kacang ada di daftar bahan, tertulis: kacang tanah, arachis hypogaea. Efek: pada orang alergi kacang bisa memicu bengkak bibir, sesak napas, sampai syok anafilaksis". Teks efek tetap per pantangan di `Pantangan.efek`, jadi model tidak mengarang gejala.
+- Instruksi: satu kalimat per fakta, paling banyak tiga: kata di label lalu efeknya. Dilarang menambah gejala, memakai kata "aman", memberi saran medis/obat/dosis, atau menyebut bahan lain.
+- Untuk "dapat mengandung" pada alergen, efeknya ditambah: sisa kecil pun bisa memicu reaksi pada orang yang alergi berat.
+- Jawaban dicek dulu: ditolak kalau memuat kata utuh "aman" atau "safe", menyebut pantangan lain, atau lebih dari 450 huruf. Tanda markdown dibersihkan.
 - **Bahasa:** dicoba bahasa Indonesia dulu. iOS 26.5 belum mendukung bahasa Indonesia di Foundation Models (daftar bahasa modelnya tidak memuat "id"), jadi app mengulang dengan prompt bahasa Inggris. Di iOS 27, penjelasan keluar dalam bahasa Indonesia.
 - Kalau tidak tersedia, kartu tetap jalan. Hanya bagian "Kenapa" yang hilang.
 
 ### Layar hasil, dari atas ke bawah
 1. Foto label (kecil)
 2. Kartu merah atau hijau, dengan kotak kuning kalau ada peringatan
-3. **Kenapa**: penjelasan Foundation Models
+3. **Kenapa**: efek bahan pantangan, ditulis Foundation Models
 4. **Di label**: kalimat Bahan dan Dapat mengandung, kata pantangan disorot merah
 5. **Hasil AI**: "Kalimat label: 1 bahan · 1 peringatan · 0 lain" dan "Penjelasan: Apple Foundation Models, bahasa Indonesia/Inggris dan alasannya"
-6. Tombol **Foto ulang** menempel di bawah
+6. Tombol **Foto ulang** dan **Galeri** menempel di bawah
 
 ## 2. Dataset Create ML
 

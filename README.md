@@ -10,7 +10,7 @@ Pengguna memilih pantangan makannya (susu, kacang, telur, gluten, pemanis, garam
 
 1. **Vision** membaca teks dari foto, hanya bagian di bawah judul Komposisi atau Ingredients. Foto yang bukan daftar komposisi ditolak.
 2. **Model kustom PemilahKalimat** (`PemilahKalimat.mlmodel`, buatan kami, dilatih dengan Create ML, dipakai lewat Core ML) memilah tiap kalimat: `bahan`, `peringatan`, atau `lain`. Daftar kata hanya mencocokkan pantangan di kalimat `bahan`. Dilatih dengan Create ML (maxEnt) dari 940 kalimat 206 label produk Indonesia (Open Food Facts), dibagi train/validation/test per produk. Akurasi test 85,9%. Lihat [`dataset/`](dataset/README.md).
-3. **Foundation Models** (System Language Model, Apple Intelligence) menjelaskan kenapa, misalnya "Arachis hypogaea adalah nama ilmiah kacang tanah." Penjelasan dicek dulu: tidak boleh memakai kata "aman" atau menyebut pantangan lain. Kalau Apple Intelligence mati, penjelasan tidak tampil dan kartu tetap jalan.
+3. **Foundation Models** (System Language Model, Apple Intelligence) menjelaskan efeknya, misalnya "Kacang tanah, arachis hypogaea: pada orang alergi kacang bisa memicu bengkak bibir, sesak napas, sampai syok anafilaksis." Teks efek diambil dari `Pantangan.efek`, model hanya merangkai kalimat. Penjelasan dicek dulu: tidak boleh memakai kata "aman" atau menyebut pantangan lain. Kalau Apple Intelligence mati, penjelasan tidak tampil dan kartu tetap jalan.
 
 ## Validasi
 

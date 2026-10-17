@@ -51,6 +51,30 @@ enum Pantangan: String, CaseIterable, Identifiable, Codable {
         }
     }
 
+    /// Efek umum bagi orang yang menghindari bahan ini. Diberikan ke Foundation Models sebagai fakta
+    /// supaya model tidak mengarang gejala. Jangan sebut nama pantangan lain di sini: pengecek akan menolak.
+    var efek: String {
+        switch self {
+        case .susu: return "pada orang alergi susu bisa memicu gatal, ruam, muntah, sampai sesak napas"
+        case .kacang: return "pada orang alergi kacang bisa memicu bengkak bibir, sesak napas, sampai syok anafilaksis"
+        case .telur: return "pada orang alergi telur bisa memicu ruam, gatal, muntah, sampai sesak napas"
+        case .gluten: return "pada penderita celiac bisa merusak usus halus dan memicu diare serta kembung"
+        case .pemanis: return "bisa menaikkan gula darah pada penderita diabetes, dan sebagian pemanis buatan bisa memicu kembung atau diare"
+        case .garam: return "natrium tinggi bisa menaikkan tekanan darah dan membebani jantung serta ginjal"
+        }
+    }
+
+    var efekInggris: String {
+        switch self {
+        case .susu: return "in people with a milk allergy it can trigger itching, hives, vomiting, or trouble breathing"
+        case .kacang: return "in people with a nut allergy it can trigger lip swelling, trouble breathing, or anaphylaxis"
+        case .telur: return "in people with an egg allergy it can trigger hives, itching, vomiting, or trouble breathing"
+        case .gluten: return "in people with celiac disease it can damage the small intestine and cause diarrhea and bloating"
+        case .pemanis: return "it can raise blood sugar in people with diabetes, and some artificial sweeteners can cause bloating or diarrhea"
+        case .garam: return "high sodium can raise blood pressure and strain the heart and kidneys"
+        }
+    }
+
     /// Nama di label Indonesia, Inggris, dan nama kimia/INCI. Dicocokkan utuh, bukan potongan kata.
     var frasa: [String] {
         switch self {

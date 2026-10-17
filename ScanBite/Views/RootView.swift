@@ -1,4 +1,5 @@
 import AVFoundation
+import PhotosUI
 import SwiftUI
 
 struct RootView: View {
@@ -148,6 +149,8 @@ struct ScanView: View {
     @State private var hasil: ScanOutput?
     @State private var sedang = false
     @State private var bukaKamera = false
+    @State private var bukaGaleri = false
+    @State private var fotoGaleri: PhotosPickerItem?
     @State private var izinDitolak = false
     @State private var bicara = AVSpeechSynthesizer()
     @State private var gambarTerakhir: UIImage?
@@ -223,6 +226,9 @@ struct ScanView: View {
                         DeniedBanner(bukaPengaturan: bukaPengaturan)
                     }
                     PrimaryButton(title: "Pakai kamera", systemImage: "camera", imageOnTrailing: true, action: mintaKamera)
+                    PrimaryButton(title: "Pilih dari galeri", systemImage: "photo.on.rectangle", imageOnTrailing: true, outline: true) {
+                        bukaGaleri = true
+                    }
                 }
             }
             .padding(20)
@@ -230,7 +236,12 @@ struct ScanView: View {
         .background(Color.pantangBg)
         .safeAreaInset(edge: .bottom) {
             if gambarTerakhir != nil && !sedang {
-                PrimaryButton(title: "Foto ulang", systemImage: "arrow.clockwise", imageOnTrailing: false, centeredIcon: true, action: mintaKamera)
+                HStack(spacing: 10) {
+                    PrimaryButton(title: "Foto ulang", systemImage: "arrow.clockwise", imageOnTrailing: false, centeredIcon: true, action: mintaKamera)
+                    PrimaryButton(title: "Galeri", systemImage: "photo.on.rectangle", imageOnTrailing: false, outline: true) {
+                        bukaGaleri = true
+                    }
+                }
                     .padding(.horizontal, 20)
                     .padding(.top, 12)
                     .padding(.bottom, 8)
@@ -246,6 +257,17 @@ struct ScanView: View {
                 Task { await proses(image) }
             }
             .ignoresSafeArea()
+        }
+        // PhotosPicker berjalan di proses terpisah, jadi tidak perlu izin akses galeri.
+        .photosPicker(isPresented: $bukaGaleri, selection: $fotoGaleri, matching: .images)
+        .onChange(of: fotoGaleri) { _, item in
+            guard let item else { return }
+            fotoGaleri = nil
+            Task {
+                guard let data = try? await item.loadTransferable(type: Data.self),
+                      let image = UIImage(data: data) else { return }
+                await proses(image)
+            }
         }
         .onAppear(perform: pratinjauJikaDiminta)
     }

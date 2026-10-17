@@ -27,7 +27,7 @@ Buka dengan cerita satu pengguna sungguhan (nama dan pantangannya) sebelum menun
 
 1. Vision (side-app, baca teks dari foto) membaca huruf di bawah judul Komposisi atau Ingredients.
 2. Model kustom PemilahKalimat (buatan kami, dilatih dengan Create ML; diajarkan, sesi 1.3) memilah tiap kalimat jadi bahan, peringatan, atau lain. Hanya kalimat bahan yang dicocokkan dengan daftar kata.
-3. Foundation Models (diajarkan, sesi 2.6) menjelaskan kenapa, di bagian KENAPA.
+3. Foundation Models (diajarkan, sesi 2.6) menjelaskan efek bahan pantangan (gejala alergi, gula darah, tekanan darah), di bagian KENAPA.
 
 Bagian HASIL AI di layar menunjukkan jumlah kalimat yang dipilah Create ML dan apakah Foundation Models jalan.
 

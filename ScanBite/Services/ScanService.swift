@@ -69,7 +69,7 @@ enum ScanService {
             ? nil
             : "Label juga menulis dapat mengandung \(IngredientMatch.gabungNama(mungkin.map(\.kataDiKalimat)))."
 
-        // 3. Foundation Models menjelaskan kenapa kata yang terbaca termasuk pantangan.
+        // 3. Foundation Models menjelaskan efek pantangan yang terbaca bagi pemakainya.
         let (penjelasan, statusModel) = await jelaskan(
             hits: matched.hits, mungkin: mungkin,
             teksBahan: teksBahan, teksPeringatan: teksPeringatan
@@ -113,21 +113,22 @@ enum ScanService {
         if !model.supportsLocale() {
             return (nil, "bahasa iPhone (\(Locale.current.identifier)) tidak didukung")
         }
-        var jumlahKata = mungkin.count
+        // Satu fakta per pantangan: kata di label plus efeknya. Efek diambil dari Pantangan.efek,
+        // bukan dikarang model; model hanya merangkai kalimatnya.
         var faktaID: [String] = []
         var faktaEN: [String] = []
         for p in hits {
-            let daftar = IngredientMatch.kataCocok(p, di: teksBahan)
-            jumlahKata += max(1, daftar.count)
-            let kata = daftar.joined(separator: ", ")
-            faktaID.append("\(p.kataDiKalimat) ada di daftar bahan, tertulis: \(kata)")
-            faktaEN.append("\(p.namaInggris) is in the ingredient list, written on the label as: \(kata)")
+            let kata = IngredientMatch.kataCocok(p, di: teksBahan).joined(separator: ", ")
+            faktaID.append("\(p.kataDiKalimat) ada di daftar bahan, tertulis: \(kata). Efek: \(p.efek)")
+            faktaEN.append("\(p.namaInggris) is in the ingredient list, written on the label as: \(kata). Effect: \(p.efekInggris)")
         }
         for p in mungkin {
-            faktaID.append("\(p.kataDiKalimat) hanya ada di kalimat dapat mengandung")
-            faktaEN.append("\(p.namaInggris) only appears in a may-contain statement")
+            let sisaID = p.kelompok == "Alergi" ? ", sisa kecil pun bisa memicu reaksi pada orang yang alergi berat" : ""
+            let sisaEN = p.kelompok == "Alergi" ? ", and even small traces can trigger a reaction in people with a severe allergy" : ""
+            faktaID.append("\(p.kataDiKalimat) hanya ada di kalimat dapat mengandung. Efek: \(p.efek)\(sisaID)")
+            faktaEN.append("\(p.namaInggris) only appears in a may-contain statement. Effect: \(p.efekInggris)\(sisaEN)")
         }
-        let maks = min(3, jumlahKata)
+        let maks = min(3, hits.count + mungkin.count)
         let diagnosa = Self.diagnosaBahasa(model)
         print("PANTANG FM diagnosa: \(diagnosa)")
         let boleh = Set(hits + mungkin)
@@ -135,15 +136,16 @@ enum ScanService {
         // Coba bahasa Indonesia dulu. Di iPhone fisik, Foundation Models menolak teks Indonesia
         // ("unsupported language or locale"), jadi ulangi dalam bahasa Inggris.
         let sessionID = LanguageModelSession(instructions: """
-        Kamu menjelaskan label kemasan makanan dalam bahasa Indonesia, untuk orang yang punya pantangan makan.
+        Kamu memberi tahu efek bahan di label kemasan makanan, dalam bahasa Indonesia, untuk orang yang punya pantangan makan.
         Tulis satu kalimat pendek untuk setiap fakta, paling banyak tiga kalimat.
-        Jelaskan arti kata yang tertulis, misalnya nama Latin, nama Inggris, atau bahan turunan.
-        Jangan memakai kata aman. Jangan memberi saran medis. Jangan menyebut bahan yang tidak ada di fakta.
+        Sebut kata yang tertulis di label, lalu efeknya. Pakai efek yang ada di fakta saja, jangan menambah gejala lain.
+        Kalau kata di label sama dengan nama bahannya, jangan menulis "berasal dari", langsung tulis efeknya.
+        Jangan memakai kata aman. Jangan memberi saran medis, obat, atau dosis. Jangan menyebut bahan yang tidak ada di fakta.
 
-        Contoh fakta: susu ada di daftar bahan, tertulis: whey bubuk
-        Contoh jawaban: Whey bubuk dibuat dari susu.
-        Contoh fakta: telur hanya ada di kalimat dapat mengandung
-        Contoh jawaban: Telur bukan bahan produk ini, tetapi pabriknya juga mengolah telur, jadi bisa ada sisa.
+        Contoh fakta: susu ada di daftar bahan, tertulis: whey bubuk. Efek: pada orang alergi susu bisa memicu gatal, ruam, muntah, sampai sesak napas
+        Contoh jawaban: Whey bubuk berasal dari susu, dan pada orang alergi susu bisa memicu gatal, ruam, muntah, sampai sesak napas.
+        Contoh fakta: telur hanya ada di kalimat dapat mengandung. Efek: pada orang alergi telur bisa memicu ruam, gatal, muntah, sampai sesak napas, sisa kecil pun bisa memicu reaksi pada orang yang alergi berat
+        Contoh jawaban: Sisa telur dari pabrik pun bisa memicu ruam atau sesak napas pada orang yang alergi telur berat.
         """)
         do {
             let reply = try await sessionID.respond(to: "Fakta:\n" + faktaID.joined(separator: "\n")).content
@@ -160,15 +162,16 @@ enum ScanService {
         }
 
         let sessionEN = LanguageModelSession(instructions: """
-        You explain food package labels for people who avoid certain foods.
+        You tell people who avoid certain foods what an ingredient on a food label can do to them.
         Write one short sentence per fact, at most three sentences, in plain English.
-        Explain what the written word means, for example a Latin name, an Indonesian name, or a derived ingredient.
-        Do not use the word safe. Do not give medical advice. Do not mention ingredients that are not in the facts.
+        Name the word written on the label, then its effect. Use only the effect given in the fact, do not add other symptoms.
+        If the label word is the same as the ingredient name, do not write "comes from", just state the effect.
+        Do not use the word safe. Do not give medical advice, medicine, or doses. Do not mention ingredients that are not in the facts.
 
-        Example fact: milk is in the ingredient list, written on the label as: whey bubuk
-        Example answer: Whey bubuk is whey powder, which is made from milk.
-        Example fact: egg only appears in a may-contain statement
-        Example answer: Egg is not an ingredient, but the factory also handles egg, so traces are possible.
+        Example fact: milk is in the ingredient list, written on the label as: whey bubuk. Effect: in people with a milk allergy it can trigger itching, hives, vomiting, or trouble breathing
+        Example answer: Whey bubuk comes from milk, and in people with a milk allergy it can trigger itching, hives, vomiting, or trouble breathing.
+        Example fact: egg only appears in a may-contain statement. Effect: in people with an egg allergy it can trigger hives, itching, vomiting, or trouble breathing, and even small traces can trigger a reaction in people with a severe allergy
+        Example answer: Even traces of egg from the factory can trigger hives or trouble breathing in people with a severe egg allergy.
         """)
         do {
             let reply = try await sessionEN.respond(to: "Facts:\n" + faktaEN.joined(separator: "\n")).content
@@ -209,7 +212,7 @@ enum ScanService {
         let lower = teks.lowercased()
         // Kata utuh saja: "tanaman" dan "keamanan pangan" tidak boleh ikut tertolak karena memuat "aman".
         let kataLarang = inggris ? #"\bsafe(ly|r|st)?\b"# : #"\baman\b"#
-        guard !teks.isEmpty, teks.count <= 320,
+        guard !teks.isEmpty, teks.count <= 450,
               lower.range(of: kataLarang, options: .regularExpression) == nil else { return nil }
         for p in Pantangan.allCases where !boleh.contains(p)
             && lower.range(of: "\\b\(inggris ? p.namaInggris : p.kataDiKalimat)\\b", options: .regularExpression) != nil {
