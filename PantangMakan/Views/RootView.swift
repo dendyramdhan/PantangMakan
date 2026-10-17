@@ -264,11 +264,8 @@ struct ScanView: View {
                 Text("HASIL AI")
                     .font(.pantangEyebrow)
                     .foregroundStyle(Color.pantangMuted)
-                BarisAI(
-                    nama: "Pemilah Kalimat · model kami",
-                    hasil: "\(hasil.jumlah[.bahan] ?? 0) bahan · \(hasil.jumlah[.peringatan] ?? 0) peringatan · \(hasil.jumlah[.lain] ?? 0) lain"
-                )
-                BarisAI(nama: "Penjelasan · Apple Foundation Models", hasil: hasil.statusModel)
+                RincianPemilah(kalimat: hasil.kalimatDipilah)
+                BarisAI(nama: "Apple Foundation Models · Penjelasan", hasil: hasil.statusModel)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .accessibilityElement(children: .combine)
@@ -603,6 +600,41 @@ private struct DeniedBanner: View {
         .overlay(alignment: .leading) {
             Rectangle().fill(Color.pantangAccent).frame(width: 2)
         }
+    }
+}
+
+/// Hasil Model Kustom dirinci ke bawah: tiap jenis, jumlahnya, lalu kalimatnya.
+private struct RincianPemilah: View {
+    let kalimat: [KalimatLabel]
+
+    private let jenis: [(JenisKalimat, String, String)] = [
+        (.bahan, "Bahan", "dicek dengan pantangan"),
+        (.peringatan, "Peringatan", "jadi kotak kuning"),
+        (.lain, "Lain", "diabaikan"),
+    ]
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Model Kustom · Pemilah Kalimat")
+                .font(.system(size: 14, weight: .semibold))
+                .foregroundStyle(Color.pantangInk)
+            ForEach(jenis, id: \.0) { item in
+                let isi = kalimat.filter { $0.jenis == item.0 }
+                VStack(alignment: .leading, spacing: 3) {
+                    Text("\(item.1): \(isi.count) kalimat, \(item.2)")
+                        .font(.pantangMeta)
+                        .foregroundStyle(Color.pantangInk)
+                    ForEach(Array(isi.enumerated()), id: \.offset) { _, k in
+                        Text("• \(k.teks)")
+                            .font(.system(size: 12, design: .monospaced))
+                            .foregroundStyle(Color.pantangMuted)
+                            .lineLimit(2)
+                    }
+                }
+                .padding(.leading, 10)
+            }
+        }
+        .padding(.top, 2)
     }
 }
 

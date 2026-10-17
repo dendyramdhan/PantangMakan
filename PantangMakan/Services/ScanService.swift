@@ -18,13 +18,15 @@ struct ScanOutput: Equatable {
     /// Status Foundation Models untuk bagian HASIL AI, termasuk alasan kalau gagal.
     var statusModel: String
     var jumlah: [JenisKalimat: Int]
+    /// Semua kalimat hasil pilahan, urut seperti di label, untuk rincian di HASIL AI.
+    var kalimatDipilah: [KalimatLabel]
     var adaBahan: Bool
     var ditolak: Bool
 
     static let tolak = ScanOutput(
         teks: "", teksPeringatan: "",
         kalimat: "Ditolak. Gambar ini bukan daftar komposisi.",
-        peringatan: nil, penjelasan: nil, statusModel: "", jumlah: [:], adaBahan: false, ditolak: true
+        peringatan: nil, penjelasan: nil, statusModel: "", jumlah: [:], kalimatDipilah: [], adaBahan: false, ditolak: true
     )
 }
 
@@ -71,6 +73,7 @@ enum ScanService {
             penjelasan: penjelasan,
             statusModel: statusModel,
             jumlah: jumlah,
+            kalimatDipilah: kalimat,
             adaBahan: !matched.hits.isEmpty,
             ditolak: false
         )
@@ -137,7 +140,7 @@ enum ScanService {
                 print("PANTANG FM ditolak: \(reply)")
                 return (nil, "jawaban ditolak pengecek")
             }
-            return (teks, "bahasa Indonesia")
+            return (teks, "Bahasa Indonesia (Apple Intelligence di iOS \(UIDevice.current.systemVersion) mendukung bahasa Indonesia)")
         } catch LanguageModelSession.GenerationError.unsupportedLanguageOrLocale {
             print("PANTANG FM: bahasa Indonesia ditolak, coba bahasa Inggris")
         } catch {
@@ -162,7 +165,7 @@ enum ScanService {
                 print("PANTANG FM ditolak (EN): \(reply)")
                 return (nil, "jawaban ditolak pengecek")
             }
-            return (teks, "bahasa Inggris")
+            return (teks, "Bahasa Inggris (Apple Intelligence di iOS \(UIDevice.current.systemVersion) belum mendukung bahasa Indonesia)")
         } catch {
             print("PANTANG FM error (EN): \(error)")
             return (nil, "gagal, \(error.localizedDescription)")
@@ -183,7 +186,10 @@ enum ScanService {
     /// Penjelasan ditolak kalau memakai kata "aman", terlalu panjang, atau menyebut pantangan lain.
     /// Hanya kalimat sebanyak kata yang dijelaskan yang dipakai; sisanya biasanya mengulang.
     private static func diterima(_ mentah: String, boleh: Set<Pantangan>, maksKalimat: Int, inggris: Bool) -> String? {
-        let rapi = mentah.replacingOccurrences(of: #"\s+"#, with: " ", options: .regularExpression)
+        let rapi = mentah
+            .replacingOccurrences(of: "*", with: "")
+            .replacingOccurrences(of: "_", with: "")
+            .replacingOccurrences(of: #"\s+"#, with: " ", options: .regularExpression)
         let potong = rapi.components(separatedBy: ". ")
             .map { $0.trimmingCharacters(in: CharacterSet(charactersIn: " .")) }
             .filter { !$0.isEmpty }
