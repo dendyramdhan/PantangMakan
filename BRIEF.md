@@ -1,4 +1,6 @@
-# PantangMakan
+# ScanBite
+
+Scan First, Eat Safer.
 
 Grup 5. Satu pengguna: yang sudah tahu pantangannya, huruf komposisi di bungkus terlalu kecil.
 

@@ -1,11 +1,11 @@
-// Membuat PantangMakan.pptx. Jalankan: npm install && node buat-slide.js
+// Membuat ScanBite.pptx. Jalankan: npm install && node buat-slide.js
 const pptxgen = require("pptxgenjs");
 const pres = new pptxgen();
 
 pres.defineLayout({ name: "WIDE", width: 13.333, height: 7.5 });
 pres.layout = "WIDE";
 pres.author = "Grup 5";
-pres.title = "PantangMakan";
+pres.title = "ScanBite";
 pres.subject = "Challenge Day 3 · Jalur Tim";
 
 const C = {
@@ -18,7 +18,7 @@ const SERIF = "Georgia";
 const DEMO = __dirname + "/demo/";
 const FOTO = __dirname + "/../validasi/foto/";
 const PHONE = 1260 / 2736;
-const FOOT = "Grup 5  ·  PantangMakan  ·  Jalur Tim";
+const FOOT = "Grup 5  ·  ScanBite  ·  Jalur Tim";
 
 const bg = (s) => { s.background = { color: C.bg }; };
 const footer = (s) => s.addText(FOOT, { x: 0.55, y: 7.05, w: 8, h: 0.25, fontFace: FONT, fontSize: 11, color: C.muted, margin: 0 });
@@ -53,11 +53,13 @@ const cropRight = (file, ratio, alt) => (s) => {
   const s = pres.addSlide();
   bg(s);
   s.addShape(pres.shapes.RECTANGLE, { x: 0, y: 0, w: 0.18, h: 7.5, fill: { color: C.brick } });
-  s.addText("Jalur Tim  ·  Grup 5", { x: 0.85, y: 1.7, w: 7, h: 0.35, fontFace: FONT, fontSize: 16, color: C.brick, margin: 0 });
-  s.addText("PantangMakan.", { x: 0.85, y: 2.15, w: 7, h: 1.05, fontFace: SERIF, fontSize: 60, color: C.ink, margin: 0 });
-  s.addText("Foto komposisinya, langsung tahu ada pantanganmu atau tidak.", { x: 0.85, y: 3.35, w: 6.5, h: 0.8, fontFace: FONT, fontSize: 20, color: C.muted, margin: 0, valign: "top" });
-  s.addText("Muhammad Fajar Wira Azdi\nAhmad Syafiq Kamil\nDendy Ramdhan Fauzy\nMohamad Arrizal\nZuber Khatib", { x: 0.85, y: 4.55, w: 6, h: 1.9, fontFace: FONT, fontSize: 15, color: C.ink, margin: 0, valign: "top", paraSpaceAfter: 3 });
-  phone(s, DEMO + "pantang-bahaya.png", 9.1, 0.55, 6.4, "Layar hasil PantangMakan: Ada kacang dan pemanis di komposisi ini");
+  s.addImage({ path: __dirname + "/logo-ScanBite.png", x: 0.85, y: 0.55, w: 1.0, h: 1.0 * 886 / 866, altText: "Logo ScanBite" });
+  s.addText("Jalur Tim  ·  Grup 5", { x: 0.85, y: 1.8, w: 7, h: 0.35, fontFace: FONT, fontSize: 16, color: C.brick, margin: 0 });
+  s.addText("ScanBite.", { x: 0.85, y: 2.15, w: 7, h: 1.05, fontFace: SERIF, fontSize: 60, color: C.ink, margin: 0 });
+  s.addText("Scan First, Eat Safer", { x: 0.85, y: 3.25, w: 6.5, h: 0.5, fontFace: SERIF, fontSize: 24, italic: true, color: C.brick, margin: 0 });
+  s.addText("Foto komposisinya, langsung tahu ada pantanganmu atau tidak.", { x: 0.85, y: 3.85, w: 6.5, h: 0.6, fontFace: FONT, fontSize: 17, color: C.muted, margin: 0, valign: "top" });
+  s.addText("Muhammad Fajar Wira Azdi\nAhmad Syafiq Kamil\nDendy Ramdhan Fauzy\nMohamad Arrizal\nZuber Khatib", { x: 0.85, y: 4.75, w: 6, h: 1.9, fontFace: FONT, fontSize: 15, color: C.ink, margin: 0, valign: "top", paraSpaceAfter: 3 });
+  phone(s, DEMO + "pantang-bahaya.png", 9.1, 0.55, 6.4, "Layar hasil ScanBite: Ada kacang dan pemanis di komposisi ini");
   s.addNotes("Sebut nama app, jalur tim, dan lima nama Grup 5. Langsung ke cerita pengguna.");
 }
 
@@ -215,6 +217,6 @@ divider("06", "Rencana Pengembangan", "Satu langkah berikutnya.", null, "Satu la
   s.addNotes("Penutup satu kalimat: berikutnya kami uji 30 kemasan dari kamera iPhone sendiri, lalu kalimat yang salah masuk ke data latih. Tidak ada slide penutup.");
 }
 
-pres.writeFile({ fileName: __dirname + "/PantangMakan.pptx" })
+pres.writeFile({ fileName: __dirname + "/ScanBite.pptx" })
   .then(() => console.log("wrote pptx"))
   .catch((err) => { console.error(err); process.exit(1); });

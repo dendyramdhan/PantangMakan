@@ -1,4 +1,6 @@
-# PantangMakan
+# ScanBite
+
+*Scan First, Eat Safer*
 
 App iOS untuk Challenge Day 3, Dicoding x Apple Developer Institute (Professional AI Solutions), Jalur Tim, Grup 5.
 
@@ -26,7 +28,7 @@ Pengguna memilih pantangan makannya (susu, kacang, telur, gluten, pemanis, garam
 - `PantangMakan/` kode app dan model Create ML.
 - `dataset/` data latih, script OCR/label, dan `latih.swift`.
 - `validasi/` 10 foto uji, script evaluasi, dan hasilnya.
-- `presentasi/` slide (`PantangMakan.pptx`, `PantangMakan.pdf`), screenshot demo, dan script pembuat slide.
+- `presentasi/` slide (`ScanBite.pptx`, `ScanBite.pdf`), screenshot demo, dan script pembuat slide.
 - `figma-frames/`, `figma-plugin/`, `ui/` bahan desain dan naskah tim.
 
 ## Tim

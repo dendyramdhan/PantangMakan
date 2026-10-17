@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		04662F7511D44C4A359D79C3 /* ContohSusu.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B5CA91C5079F453FFE0A1672 /* ContohSusu.jpg */; };
+		4486D05BDAA8A8861B240A36 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D9C25A5C8977739FABE7D70E /* Assets.xcassets */; };
 		4ED0AC0A78D408EA08A75713 /* Pantangan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160C288BE3BBB7503D849281 /* Pantangan.swift */; };
 		77189FC9DC0C2A7775E04743 /* CameraPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = E70D8AB5A20956C2C6BC8D24 /* CameraPicker.swift */; };
 		9FDAB1CF6B64DB261E23F500 /* Pemilah.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80EB7C29CD274D7D2DD302C4 /* Pemilah.swift */; };
@@ -22,12 +23,13 @@
 		160C288BE3BBB7503D849281 /* Pantangan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pantangan.swift; sourceTree = "<group>"; };
 		2F960F5A97E435BB47CCE39B /* PemilahKalimat.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = PemilahKalimat.mlmodel; sourceTree = "<group>"; };
 		48B72B69EC9157C8E5911987 /* ScanService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanService.swift; sourceTree = "<group>"; };
-		5186F8CCF480887450FA74AA /* PantangMakan.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PantangMakan.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		5186F8CCF480887450FA74AA /* PantangMakan.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = PantangMakan.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		80EB7C29CD274D7D2DD302C4 /* Pemilah.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pemilah.swift; sourceTree = "<group>"; };
 		88AB2A195F860718BD385252 /* ContohTeh.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = ContohTeh.jpg; sourceTree = "<group>"; };
 		B5CA91C5079F453FFE0A1672 /* ContohSusu.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = ContohSusu.jpg; sourceTree = "<group>"; };
 		C7455224D3C8442EBB1E767B /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		C784D315E0115A7ED47A2F25 /* PantangMakanApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PantangMakanApp.swift; sourceTree = "<group>"; };
+		D9C25A5C8977739FABE7D70E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E70D8AB5A20956C2C6BC8D24 /* CameraPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPicker.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -35,6 +37,7 @@
 		0C631575AC4A7B9071F6E09B /* PantangMakan */ = {
 			isa = PBXGroup;
 			children = (
+				D9C25A5C8977739FABE7D70E /* Assets.xcassets */,
 				C784D315E0115A7ED47A2F25 /* PantangMakanApp.swift */,
 				811475A8E504986F9559875A /* Models */,
 				8637E768BE0F535CF8CD4FE1 /* Samples */,
@@ -124,9 +127,10 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
-				LastUpgradeCheck = 2700;
+				LastUpgradeCheck = 1430;
 				TargetAttributes = {
 					DA8CED517DE3B3925BDA499E = {
+						DevelopmentTeam = R543KMB693;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -155,6 +159,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4486D05BDAA8A8861B240A36 /* Assets.xcassets in Resources */,
 				04662F7511D44C4A359D79C3 /* ContohSusu.jpg in Resources */,
 				B525EE71F7F4334B3E0EEAD2 /* ContohTeh.jpg in Resources */,
 			);
@@ -215,10 +220,8 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = MD9FTFBKQK;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -239,7 +242,6 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
-				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -281,10 +283,8 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = MD9FTFBKQK;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -298,7 +298,6 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
-				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;
@@ -313,8 +312,9 @@
 				CODE_SIGNING_REQUIRED = NO;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = R543KMB693;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = PantangMakan;
+				INFOPLIST_KEY_CFBundleDisplayName = ScanBite;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Kamera dipakai untuk memfoto daftar komposisi pada kemasan.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Galeri dipakai untuk memilih foto daftar komposisi.";
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -340,8 +340,9 @@
 				CODE_SIGNING_REQUIRED = NO;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = R543KMB693;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = PantangMakan;
+				INFOPLIST_KEY_CFBundleDisplayName = ScanBite;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Kamera dipakai untuk memfoto daftar komposisi pada kemasan.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Galeri dipakai untuk memilih foto daftar komposisi.";
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

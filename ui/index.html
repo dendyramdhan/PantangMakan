@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>PantangMakan — proposal UI</title>
+<title>ScanBite — proposal UI</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,560;9..144,680&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -99,7 +99,7 @@
 <div class="wrap">
   <section>
     <p class="kicker" id="kicker">Membaca Notion…</p>
-    <h1 id="judul">PantangMakan</h1>
+    <h1 id="judul">ScanBite</h1>
     <p class="lead" id="lead"></p>
     <ol id="langkah"></ol>
   </section>
@@ -232,7 +232,7 @@ function isiDariNotion(page) {
     }
     return out;
   };
-  document.getElementById("judul").textContent = page.title || "PantangMakan";
+  document.getElementById("judul").textContent = page.title || "ScanBite";
   document.getElementById("kicker").textContent = "Dibaca dari Notion · halaman PantangMakan";
   const intro = blocks.find(b => b.type === "text" && b.text.startsWith("Grup 5"));
   const masalah = section("Masalah").find(b => b.type === "text");

@@ -1,4 +1,4 @@
-# Validasi PantangMakan
+# Validasi ScanBite
 
 10 foto label komposisi produk Indonesia dari [Open Food Facts](https://world.openfoodfacts.org) (CC BY-SA), di `validasi/foto/`. Ke-10 produk ini tidak dipakai untuk melatih model Create ML.
 

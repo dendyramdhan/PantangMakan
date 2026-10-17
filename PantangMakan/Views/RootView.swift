@@ -57,7 +57,7 @@ struct OnboardingView: View {
         GeometryReader { geo in
             ScrollView {
                 VStack(alignment: .leading, spacing: 22) {
-                    AppBar()
+                    AppBar(subjudul: true)
                     VStack(alignment: .leading, spacing: 10) {
                         HStack(spacing: 8) {
                             Capsule().fill(Color.pantangAccent).frame(width: 18, height: 2)
@@ -400,16 +400,30 @@ struct ScanView: View {
 }
 
 private struct AppBar: View {
+    /// Subjudul hanya tampil di layar pertama.
+    var subjudul = false
+
     var body: some View {
         VStack(spacing: 12) {
-            HStack {
-                (Text("PantangMakan").foregroundStyle(Color.pantangInk)
-                    + Text(".").foregroundStyle(Color.pantangAccent))
-                    .font(.system(size: 20, weight: .medium, design: .serif))
+            HStack(alignment: .center) {
+                VStack(alignment: .leading, spacing: 2) {
+                    (Text("ScanBite").foregroundStyle(Color.pantangInk)
+                        + Text(".").foregroundStyle(Color.pantangAccent))
+                        .font(.system(size: 20, weight: .medium, design: .serif))
+                    if subjudul {
+                        Text("Scan First, Eat Safer")
+                            .font(.pantangCaption)
+                            .foregroundStyle(Color.pantangMuted)
+                    }
+                }
                 Spacer()
-                Image(systemName: "viewfinder")
-                    .font(.system(size: 18, weight: .semibold))
-                    .foregroundStyle(Color.pantangAccent)
+                Image("Logo")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 34, height: 34)
+                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                    .overlay { RoundedRectangle(cornerRadius: 8).stroke(Color.pantangLine, lineWidth: 1) }
+                    .accessibilityLabel("Logo ScanBite")
             }
             Rectangle().fill(Color.pantangLine).frame(height: 1)
         }

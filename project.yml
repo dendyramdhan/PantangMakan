@@ -14,7 +14,8 @@ targets:
       base:
         PRODUCT_NAME: PantangMakan
         PRODUCT_BUNDLE_IDENTIFIER: com.dendy.PantangMakan
-        INFOPLIST_KEY_CFBundleDisplayName: PantangMakan
+        INFOPLIST_KEY_CFBundleDisplayName: ScanBite
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         INFOPLIST_KEY_UILaunchScreen_Generation: YES
         INFOPLIST_KEY_UISupportedInterfaceOrientations: UIInterfaceOrientationPortrait
         INFOPLIST_KEY_NSCameraUsageDescription: Kamera dipakai untuk memfoto daftar komposisi pada kemasan.

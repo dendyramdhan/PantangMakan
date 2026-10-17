@@ -1,4 +1,4 @@
-// Builds real PantangMakan components and five screens on the current page.
+// Builds real ScanBite components and five screens on the current page.
 // Matches the Lovable prototype: six pantangan, no "aman", kacang examples.
 
 const INK = rgb("2B2B28");
@@ -434,7 +434,7 @@ function makeAppBar(icons) {
   row.primaryAxisAlignItems = "SPACE_BETWEEN";
   row.resize(350, 28);
   row.primaryAxisSizingMode = "FIXED";
-  row.appendChild(makeText("PantangMakan.", "App", "Ink"));
+  row.appendChild(makeText("ScanBite.", "App", "Ink"));
   row.appendChild(icons.scan.createInstance());
   const line = figma.createRectangle();
   line.name = "Divider";
@@ -901,7 +901,7 @@ async function main() {
   };
 
   const page = figma.currentPage;
-  page.name = "PantangMakan";
+  page.name = "ScanBite";
   const leftover = page.children.slice();
   for (const node of leftover) node.remove();
 
@@ -1136,7 +1136,7 @@ async function main() {
   screens.counterAxisAlignItems = "MIN";
   for (const screen of [pilih, scan, muat, ada, tanpa, ditolak, denied]) screens.appendChild(screen);
 
-  const board = h("PantangMakan");
+  const board = h("ScanBite");
   board.itemSpacing = 64;
   board.paddingTop = 48;
   board.paddingBottom = 48;
@@ -1158,7 +1158,7 @@ async function main() {
 
   page.selection = [chips, buttons];
   figma.viewport.scrollAndZoomIntoView([board]);
-  figma.closePlugin("Komponen PantangMakan siap");
+  figma.closePlugin("Komponen ScanBite siap");
 }
 
 main().catch(function (err) {

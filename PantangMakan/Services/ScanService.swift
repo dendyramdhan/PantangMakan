@@ -196,9 +196,12 @@ enum ScanService {
             .prefix(maksKalimat)
         let teks = potong.map { $0 + "." }.joined(separator: " ")
         let lower = teks.lowercased()
-        let kataLarang = inggris ? "safe" : "aman"
-        guard !teks.isEmpty, teks.count <= 320, !lower.contains(kataLarang) else { return nil }
-        for p in Pantangan.allCases where !boleh.contains(p) && lower.contains(inggris ? p.namaInggris : p.kataDiKalimat) {
+        // Kata utuh saja: "tanaman" dan "keamanan pangan" tidak boleh ikut tertolak karena memuat "aman".
+        let kataLarang = inggris ? #"\bsafe(ly|r|st)?\b"# : #"\baman\b"#
+        guard !teks.isEmpty, teks.count <= 320,
+              lower.range(of: kataLarang, options: .regularExpression) == nil else { return nil }
+        for p in Pantangan.allCases where !boleh.contains(p)
+            && lower.range(of: "\\b\(inggris ? p.namaInggris : p.kataDiKalimat)\\b", options: .regularExpression) != nil {
             return nil
         }
         return teks

@@ -1,6 +1,6 @@
-Grup 5 · Jalur Tim · PantangMakan
+Grup 5 · Jalur Tim · ScanBite: Scan First, Eat Safer
 
-Naskah slide. Isinya sama dengan `presentasi/PantangMakan.pptx`.
+Naskah slide. Isinya sama dengan `presentasi/ScanBite.pptx`.
 
 ## Tim Kami
 
@@ -53,4 +53,4 @@ Uji 30 kemasan dari kamera iPhone sendiri di minimarket, lalu kalimat yang salah
 
 ## Pengumpulan
 
-Sebelum 15:30, folder iCloud `Grup 5 - PantangMakan`: slide `.pptx`, `link-github.txt` (https://github.com/dendyramdhan/PantangMakan), dan screenshot atau video demo.
+Sebelum 15:30, folder iCloud `Grup 5 - ScanBite`: slide `.pptx`, `link-github.txt` (https://github.com/dendyramdhan/ScanBite), dan screenshot atau video demo.
