@@ -14,6 +14,8 @@ enum JenisKalimat: String {
 struct KalimatLabel: Equatable {
     let teks: String
     let jenis: JenisKalimat
+    /// Keyakinan model untuk label teratas (0–1). 1 kalau model tidak dimuat.
+    var yakin: Double = 1
 }
 
 /// Memotong teks OCR menjadi kalimat, lalu memberi jenis tiap kalimat dengan model Create ML.
@@ -60,15 +62,31 @@ enum Pemilah {
         options: [.caseInsensitive]
     )
 
-    /// Tanpa model (gagal dimuat), semua kalimat dianggap bahan: perilaku lama, tidak ada yang terlewat.
+    /// Di bawah angka ini model dianggap ragu, dan kalimat diperlakukan sebagai bahan.
+    static let ambangYakin = 0.6
+
+    /// Aturan memakai hasil model (urutannya penting):
+    /// 1. Tanpa model, semua kalimat dianggap bahan.
+    /// 2. Label teratas dipakai kalau keyakinannya >= 60%.
+    /// 3. Kalau ragu (< 60%), kalimat dianggap bahan: lebih baik pantangan ikut dicek
+    ///    daripada terlewat. Kalimat "lain" yang tidak memuat nama pantangan tidak mengubah hasil.
+    /// 4. "Peringatan" hanya diterima kalau ada penanda seperti "dapat", "may", "diproduksi".
     static func pilah(_ teks: String, model: NLModel?) -> [KalimatLabel] {
         potong(teks).map { kalimat in
-            var label = model?.predictedLabel(for: kalimat).flatMap(JenisKalimat.init(rawValue:)) ?? .bahan
+            guard let model else { return KalimatLabel(teks: kalimat, jenis: .bahan) }
+            let tebakan = model.predictedLabelHypotheses(for: kalimat, maximumCount: 3)
+            guard let teratas = tebakan.max(by: { $0.value < $1.value }),
+                  var label = JenisKalimat(rawValue: teratas.key) else {
+                return KalimatLabel(teks: kalimat, jenis: .bahan)
+            }
+            if teratas.value < ambangYakin {
+                label = .bahan
+            }
             let rentang = NSRange(kalimat.startIndex..., in: kalimat)
             if label == .peringatan && penandaPeringatan.firstMatch(in: kalimat, range: rentang) == nil {
                 label = .bahan
             }
-            return KalimatLabel(teks: kalimat, jenis: label)
+            return KalimatLabel(teks: kalimat, jenis: label, yakin: teratas.value)
         }
     }
 }

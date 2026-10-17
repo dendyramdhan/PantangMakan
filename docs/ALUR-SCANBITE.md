@@ -32,6 +32,7 @@ Pilih pantangan → Foto label
 ### Langkah 0 · Pilih pantangan
 - Enam pilihan: susu, kacang, telur, gluten (Alergi), pemanis, garam (Pantangan).
 - Disimpan di iPhone. Tombol **Ubah** untuk mengganti.
+- **Tanpa pantangan:** tombol **Scan tanpa pantangan** muncul kalau belum ada yang dipilih. Keenam alergen dan pantangan dicek, dan kartunya netral (bukan merah atau hijau): "Komposisi ini memuat susu, telur, …" atau "Tidak ada alergen umum di komposisi ini."
 
 ### Langkah 1 · Foto
 - Tombol **Pakai kamera**. Kalau izin kamera ditolak: pesan dan tombol **Buka Pengaturan**.
@@ -58,6 +59,8 @@ Pilih pantangan → Foto label
 - Create ML **tidak tahu** pantangan pengguna. Ia hanya menilai jenis kalimat.
 - **Pengaman:** tebakan `peringatan` hanya diterima kalau kalimatnya memuat penanda seperti "dapat", "mungkin", "may", "diproduksi", atau "peralatan". Tanpa penanda, kalimat dianggap `bahan`. Ini supaya bahan pantangan tidak pernah tersembunyi sebagai peringatan.
 - Kalau model gagal dimuat, semua kalimat dianggap `bahan`.
+- **Confidence:** model memberi persentase untuk ketiga label, misalnya "Dapat mengandung kacang" → peringatan 93%, "Takaran saji 30 g" → lain 88%. Label teratas hanya dipakai kalau keyakinannya **≥ 60%**. Kalau ragu, kalimat dianggap `bahan`, supaya pantangan tetap dicek. Satu kata seperti "kacang" saja memang ragu (peringatan 50%, lain 28%, bahan 20%) karena kata itu muncul di kalimat bahan maupun peringatan. Di app, yang masuk ke model selalu kalimat utuh dari label, dan kalimat utuh biasanya yakin di atas 80%.
+- Label `lain` tetap dipakai model (supaya baris gizi, alamat, dan promo tidak dianggap bahan), tapi di layar hanya jumlah bahan dan peringatan yang ditampilkan.
 
 ### ⑤ Daftar kata (`Pantangan.swift`)
 - Nama tiap pantangan dalam bahasa Indonesia, Inggris, nama ilmiah, dan kode E. Contoh:

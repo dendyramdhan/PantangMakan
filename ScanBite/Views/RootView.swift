@@ -3,18 +3,21 @@ import SwiftUI
 
 struct RootView: View {
     @AppStorage("pantangmakan.pilihan") private var tersimpan = ""
+    /// Pengguna memilih scan tanpa pantangan; disimpan supaya app langsung ke layar scan.
+    @AppStorage("scanbite.tanpaPantangan") private var tanpaPantangan = false
     @State private var pilihan = Set<Pantangan>()
     @State private var selesaiOnboarding = false
 
     var body: some View {
         Group {
-            if selesaiOnboarding && !pilihan.isEmpty {
+            if selesaiOnboarding {
                 ScanView(pilihan: pilihan) {
                     selesaiOnboarding = false
                 }
             } else {
                 OnboardingView(pilihan: $pilihan) {
                     tersimpan = pilihan.map(\.rawValue).sorted().joined(separator: ",")
+                    tanpaPantangan = pilihan.isEmpty
                     selesaiOnboarding = true
                 }
             }
@@ -24,6 +27,11 @@ struct RootView: View {
             let args = ProcessInfo.processInfo.arguments
             if args.contains("--aman") {
                 pilihan = [.garam]
+                selesaiOnboarding = true
+                return
+            }
+            if args.contains("--tanpa") {
+                pilihan = []
                 selesaiOnboarding = true
                 return
             }
@@ -44,7 +52,7 @@ struct RootView: View {
             }
             let nilai = Set(tersimpan.split(separator: ",").map { Pantangan(rawValue: String($0)) }.compactMap { $0 })
             pilihan = nilai
-            selesaiOnboarding = !nilai.isEmpty
+            selesaiOnboarding = !nilai.isEmpty || tanpaPantangan
         }
     }
 }
@@ -94,6 +102,20 @@ struct OnboardingView: View {
                         enabled: !pilihan.isEmpty,
                         action: lanjut
                     )
+                    if pilihan.isEmpty {
+                        Button {
+                            lanjut()
+                        } label: {
+                            Text("Scan tanpa pantangan")
+                                .font(.pantangBody.weight(.medium))
+                                .foregroundStyle(Color.pantangInk)
+                                .frame(maxWidth: .infinity)
+                                .frame(height: 50)
+                                .overlay { RoundedRectangle(cornerRadius: 14).stroke(Color.pantangChipLine, lineWidth: 1) }
+                        }
+                        .buttonStyle(.plain)
+                        .accessibilityHint("Menampilkan alergen umum yang ada di komposisi")
+                    }
                     Text("Dari komposisi, bukan diagnosis.")
                         .font(.pantangCaption)
                         .foregroundStyle(Color.pantangMuted)
@@ -162,9 +184,16 @@ struct ScanView: View {
                 }
 
                 HStack(spacing: 10) {
-                    ChipFlow {
-                        ForEach(pilihanUrut) { item in
-                            PantangChip(title: item.kataDiKalimat, selected: false, compact: true)
+                    if pilihan.isEmpty {
+                        Text("Tanpa pantangan · cek alergen umum")
+                            .font(.pantangBody)
+                            .foregroundStyle(Color.pantangMuted)
+                        Spacer()
+                    } else {
+                        ChipFlow {
+                            ForEach(pilihanUrut) { item in
+                                PantangChip(title: item.kataDiKalimat, selected: false, compact: true)
+                            }
                         }
                     }
                     Button("Ubah", action: gantiPantangan)
@@ -249,11 +278,13 @@ struct ScanView: View {
             .clipShape(RoundedRectangle(cornerRadius: 22))
         } else {
             let bahaya = hasil.adaBahan
+            let warnaTeks = hasil.tanpaPantangan ? Color.pantangInk : (bahaya ? Color.pantangBahaya : Color.pantangAman)
+            let warnaLatar = hasil.tanpaPantangan ? Color.pantangKartu : (bahaya ? Color.pantangBahayaLatar : Color.pantangAmanLatar)
             VStack(alignment: .leading, spacing: 12) {
                 Text(hasil.kalimat)
                     .font(.pantangTitle)
                     .lineSpacing(6)
-                    .foregroundStyle(bahaya ? Color.pantangBahaya : Color.pantangAman)
+                    .foregroundStyle(warnaTeks)
                 if let peringatan = hasil.peringatan {
                     Label(peringatan, systemImage: "exclamationmark.triangle")
                         .font(.pantangBody)
@@ -266,7 +297,8 @@ struct ScanView: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(16)
-            .background(bahaya ? Color.pantangBahayaLatar : Color.pantangAmanLatar)
+            .background(warnaLatar)
+            .overlay { RoundedRectangle(cornerRadius: 22).stroke(hasil.tanpaPantangan ? Color.pantangLine : .clear, lineWidth: 1) }
             .clipShape(RoundedRectangle(cornerRadius: 22))
         }
 
@@ -289,14 +321,14 @@ struct ScanView: View {
                                 .font(.pantangCaption)
                                 .foregroundStyle(Color.pantangMuted)
                         } else {
-                            MarkedComposition(teks: hasil.teks, pilihan: pilihan)
+                            MarkedComposition(teks: hasil.teks, pilihan: pilihan.isEmpty ? Set(Pantangan.allCases) : pilihan)
                         }
                     }
                     if !hasil.teksPeringatan.isEmpty {
                         Divider().overlay(Color.pantangLine)
                         VStack(alignment: .leading, spacing: 6) {
                             SubJudul("Dapat mengandung")
-                            MarkedComposition(teks: hasil.teksPeringatan, pilihan: pilihan)
+                            MarkedComposition(teks: hasil.teksPeringatan, pilihan: pilihan.isEmpty ? Set(Pantangan.allCases) : pilihan)
                         }
                     }
                 }
@@ -354,8 +386,11 @@ struct ScanView: View {
         let ditolak = args.contains("--ditolak")
         let aman = args.contains("--aman")
         let peringatan = args.contains("--peringatan")
-        guard ditolak || aman || peringatan || args.contains("--pratinjau") else { return }
-        let baris = peringatan
+        let tanpa = args.contains("--tanpa")
+        guard ditolak || aman || peringatan || tanpa || args.contains("--pratinjau") else { return }
+        let baris = tanpa
+            ? ["BISKUIT SUSU", "KOMPOSISI", "tepung terigu, gula,", "susu bubuk, telur, garam.", "INFORMASI NILAI GIZI"]
+            : peringatan
             ? ["WAFER COKELAT", "KOMPOSISI", "tepung terigu, gula,", "susu bubuk, garam.", "Dapat mengandung", "telur dan kacang.", "INFORMASI NILAI GIZI"]
             : ditolak
             ? ["KRIUK", "Keripik Kentang", "Rasa Original", "Berat bersih 68 g"]

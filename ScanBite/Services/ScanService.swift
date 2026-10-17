@@ -21,6 +21,8 @@ struct ScanOutput: Equatable {
     /// Semua kalimat hasil pilahan, urut seperti di label, untuk rincian di HASIL AI.
     var kalimatDipilah: [KalimatLabel]
     var adaBahan: Bool
+    /// Scan tanpa pantangan: semua alergen umum dicek, kartu netral, bukan merah/hijau.
+    var tanpaPantangan: Bool = false
     var ditolak: Bool
 
     static let tolak = ScanOutput(
@@ -52,8 +54,16 @@ enum ScanService {
         for k in kalimat { jumlah[k.jenis, default: 0] += 1 }
 
         // 2. Daftar kata mencocokkan pantangan hanya di kalimat bahan.
-        let matched = IngredientMatch.kalimat(ocr: teksBahan, dipilih: dipilih)
-        let mungkin = IngredientMatch.kalimat(ocr: teksPeringatan, dipilih: dipilih).hits
+        //    Tanpa pantangan: keenam alergen dan pantangan umum dicek.
+        let tanpa = dipilih.isEmpty
+        let dicek = tanpa ? Set(Pantangan.allCases) : dipilih
+        var matched = IngredientMatch.kalimat(ocr: teksBahan, dipilih: dicek)
+        if tanpa {
+            matched.kalimat = matched.hits.isEmpty
+                ? "Tidak ada alergen umum di komposisi ini."
+                : "Komposisi ini memuat \(IngredientMatch.gabungNama(matched.hits.map(\.kataDiKalimat)))."
+        }
+        let mungkin = IngredientMatch.kalimat(ocr: teksPeringatan, dipilih: dicek).hits
             .filter { !matched.hits.contains($0) }
         let peringatan = mungkin.isEmpty
             ? nil
@@ -75,6 +85,7 @@ enum ScanService {
             jumlah: jumlah,
             kalimatDipilah: kalimat,
             adaBahan: !matched.hits.isEmpty,
+            tanpaPantangan: tanpa,
             ditolak: false
         )
     }

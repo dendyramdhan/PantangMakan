@@ -54,6 +54,8 @@ Salah terbanyak di test adalah `lain` yang tertebak `bahan` (18), kebanyakan bar
 
 Model kadang menebak kalimat bahan yang memuat "kacang" sebagai `peringatan`, karena kata itu sering muncul di kalimat "dapat mengandung kacang". Supaya bahan pantangan tidak pernah tersembunyi, `Pemilah.swift` hanya menerima tebakan `peringatan` kalau kalimatnya memuat penanda seperti "dapat", "mungkin", "may", "diproduksi", atau "peralatan". Kalau tidak ada, kalimat dianggap `bahan`.
 
+Model juga memberi persentase keyakinan untuk tiap label. Di app, label teratas hanya dipakai kalau keyakinannya ≥ 60%. Kalau di bawah itu, kalimat dianggap `bahan` (lebih baik pantangan ikut dicek daripada terlewat). Satu kata seperti "kacang" saja memang ragu (peringatan 50%, lain 28%, bahan 20%), sedangkan kalimat label utuh biasanya di atas 80%, misalnya "Dapat mengandung kacang" → peringatan 93%.
+
 ## Membuka di aplikasi Create ML
 
 1. Buka **Create ML** (Xcode → Open Developer Tool → Create ML) → New Document → **Text Classification**.
